@@ -1,0 +1,25 @@
+#MyEclipse Hibernate Properties
+#Wed May 29 23:19:25 EDT 2013
+sessionFactoryName=com.landlordapp.webservice.data.HibernateSessionFactory
+genBasicCompId=false
+profile=
+daoSFId=
+version=3.3
+jndiPath=
+detectM2M=false
+reStrategyClass=
+detectO2O=false
+springDaoFile=
+useJavaTypes=true
+keyGenerator=
+libInstallFolder=<no jars/zips in selected libraries>
+addLibs2Project=true
+genVersionTag=false
+sessionFactoryId=sessionFactory
+basePersistenceClass=
+genAnnotations=false
+reSettingsFile=
+configFile=/LandLordWebServices Maven Webapp/src/main/resources/applicationContext.xml
+createConfigFile=false
+addLibs2Classpath=true
+baseDaoClass=
