@@ -16,22 +16,22 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.landlordapp.webservice.service.impl.UserServiceI;
+import com.landlordapp.webservice.service.impl.PropertyServiceI;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserResourceTest {
+public class PropertyResourceTest {
 	@Mock
-	UserServiceI service;
+	PropertyServiceI service;
 	@InjectMocks
-	private UserResource resource = new UserResource();
+	private PropertyResource resource = new PropertyResource();
 	private String id;
-	private JSONObject fakeUser;
+	private JSONObject fakeProperty;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "user id";
-		fakeUser = new JSONObject();
-		fakeUser.put("id", id);
+		id = "property id";
+		fakeProperty = new JSONObject();
+		fakeProperty.put("id", id);
 		MockitoAnnotations.initMocks(this);
 	}
 
@@ -39,44 +39,44 @@ public class UserResourceTest {
 	public void findAllShouldReturnJSONArray() throws JSONException {
 		JSONArray users = new JSONArray();
 		when(service.findAll()).thenReturn(users);
-		JSONArray actual = resource.findAllUsers();
+		JSONArray actual = resource.findAllProperties();
 		assertEquals(users, actual);
 	}
 	
 	
 	@Test
 	public void findUserShouldReturnUserId() throws JSONException {
-		when(service.findOne(id)).thenReturn(fakeUser);
-		JSONObject user = resource.findUser(id);
+		when(service.findOne(id)).thenReturn(fakeProperty);
+		JSONObject user = resource.findProperty(id);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void findUserShouldReturnNullIfNotFound() throws JSONException {
 		when(service.findOne(id)).thenReturn(null);
-		JSONObject user = resource.findUser(id);
+		JSONObject user = resource.findProperty(id);
 		assertNull(user);
 	}
 	
 	@Test
 	public void createUserShouldReturnUserId() throws JSONException {
-		when(service.create(fakeUser)).thenReturn(fakeUser);
-		JSONObject user = resource.createUser(fakeUser);
+		when(service.create(fakeProperty)).thenReturn(fakeProperty);
+		JSONObject user = resource.createProperty(fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void updateUserUserShouldReturnUser() throws JSONException {
-		when(service.update(fakeUser)).thenReturn(fakeUser);
-		JSONObject user = resource.updateUser(fakeUser);
+		when(service.update(fakeProperty)).thenReturn(fakeProperty);
+		JSONObject user = resource.updateProperty(fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void deleteUserShouldDeleteUser() throws JSONException {
-		when(service.findOne(id)).thenReturn(fakeUser);
-		JSONObject json = resource.deleteUser(id);
-		verify(service).delete(fakeUser);
+		when(service.findOne(id)).thenReturn(fakeProperty);
+		JSONObject json = resource.deleteProperty(id);
+		verify(service).delete(fakeProperty);
 		assertEquals(json.get("success"), 1);
 	}
 

@@ -33,9 +33,23 @@
 			<list>
 				<value>com.landlordapp.webservice.domain.User</value>
 				<value>com.landlordapp.webservice.domain.Property</value>
+				<value>com.landlordapp.webservice.domain.Person</value>
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="PropertyDAO" class="com.landlordapp.webservice.data.PropertyDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="propertyService" class="com.landlordapp.webservice.service.impl.PropertyServiceI">
+		<property name="propertyDAO">
+			<ref bean="PropertyDAO" />
+		</property> 
+	</bean>
+	
 	
 	<bean id="UserDAO" class="com.landlordapp.webservice.data.UserDAO">
 		<property name="sessionFactory">

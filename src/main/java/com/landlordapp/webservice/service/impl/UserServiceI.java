@@ -1,5 +1,8 @@
 package com.landlordapp.webservice.service.impl;
 
+import java.util.List;
+
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -19,23 +22,32 @@ public class UserServiceI implements UserService {
 		return user.toJSONObject();
 	}
 	
-	public JSONObject createUser(JSONObject jsonUser) throws JSONException {
+	public JSONObject create(JSONObject jsonUser) throws JSONException {
 		User user = new User(jsonUser);
 		return userDAO.save(user).toJSONObject();
 	}
 	
-	public JSONObject updateUser(JSONObject jsonUser) throws JSONException {
+	public JSONObject update(JSONObject jsonUser) throws JSONException {
 		User user = new User(jsonUser);
 		return userDAO.save(user).toJSONObject();
 	}
 
-	public void deleteUser(JSONObject jsonUser) throws JSONException {
+	public void delete(JSONObject jsonUser) throws JSONException {
 		User user = new User(jsonUser);
 		userDAO.delete(user);
 	}
 	
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+	
+	public JSONArray findAll() throws JSONException {
+		List<User> users = this.userDAO.findAll();
+		JSONArray userJSONArray = new JSONArray();
+		for(User user: users) {
+			userJSONArray.put(user.toJSONObject());
+		}
+		return userJSONArray;
 	}
 	
 }

@@ -6,12 +6,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.landlordapp.webservice.domain.User;
+import com.landlordapp.webservice.domain.Property;
 
-public class UserDAO extends HibernateDaoSupport {
-	
+public class PropertyDAO extends HibernateDaoSupport {
 	@Transactional(propagation=Propagation.REQUIRED)
-	public User save(User transientInstance) {
+	public Property save(Property transientInstance) {
 		try {
 			getHibernateTemplate().saveOrUpdate(transientInstance);
 			return transientInstance;
@@ -21,9 +20,9 @@ public class UserDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public User findById(Long id) {
+	public Property findById(Long id) {
 		try {
-			User instance = (User) getHibernateTemplate().get("com.landlordapp.webservice.domain.User", id);
+			Property instance = (Property) getHibernateTemplate().get("com.landlordapp.webservice.domain.Property", id);
 			return instance;
 		} catch (RuntimeException re) {
 			throw re;
@@ -31,7 +30,7 @@ public class UserDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void delete(User transientInstance) {
+	public void delete(Property transientInstance) {
 		try {
 			getHibernateTemplate().delete(transientInstance);
 		} catch (RuntimeException re) {
@@ -40,9 +39,9 @@ public class UserDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<User> findAll() {
+	public List<Property> findAll() {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.User");
+			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Property");
 		} catch (RuntimeException re) {
 			throw re;
 		}

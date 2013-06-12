@@ -15,7 +15,6 @@ public class UserTest {
 	
 	@Test
 	public void contructorShouldPopulateFromJSONObjectWithID() throws JSONException {
-		
 		JSONObject object = new JSONObject();
 		object.put("id", id);
 		object.put("email", email);
@@ -49,7 +48,6 @@ public class UserTest {
 		assertEquals(object.get("id"), longId);
 		assertEquals(object.get("email"), email);
 		assertEquals(object.get("password"), password);
-		
 	}
 	
 }

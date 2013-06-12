@@ -19,58 +19,58 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.landlordapp.webservice.service.UserService;
+import com.landlordapp.webservice.service.PropertyService;
 
 @Component
-@Path("users")
-public class UserResource {
+@Path("properties")
+public class PropertyResource {
 	@Autowired
-	private UserService userService;
+	private PropertyService propertyService;
 	
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllUsers() throws JSONException {
-		JSONArray response = userService.findAll();
+	public JSONArray findAllProperties() throws JSONException {
+		JSONArray response = propertyService.findAll();
 		return response;
 	}
 	
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findUser(@PathParam("id") String id) throws JSONException {
-		JSONObject response = userService.findOne(id);
+	public JSONObject findProperty(@PathParam("id") String id) throws JSONException {
+		JSONObject response = propertyService.findOne(id);
 		return response;
 	}
 	
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createUser(JSONObject user) throws JSONException {
-		JSONObject newUser = userService.create(user);
-		return newUser;
+	public JSONObject createProperty(JSONObject property) throws JSONException {
+		JSONObject newProperty = propertyService.create(property);
+		return newProperty;
 	}
 	
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updateUser(JSONObject user) throws JSONException {
-		JSONObject newUser = userService.update(user);
-		return newUser;
+	public JSONObject updateProperty(JSONObject property) throws JSONException {
+		JSONObject newProperty = propertyService.update(property);
+		return newProperty;
 	}
 	
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteUser(@FormParam("id") String id) throws JSONException {
-		JSONObject user = userService.findOne(id);
-		userService.delete(user);
+	public JSONObject deleteProperty(@FormParam("id") String id) throws JSONException {
+		JSONObject property = propertyService.findOne(id);
+		propertyService.delete(property);
 		JSONObject object = new JSONObject();
 		object.put("success", 1);
 		return object;
 	}
 	
-	public void setUserService(UserService service) {
-		this.userService = service;
+	public void setPropertyService(PropertyService service) {
+		this.propertyService = service;
 	}
 }

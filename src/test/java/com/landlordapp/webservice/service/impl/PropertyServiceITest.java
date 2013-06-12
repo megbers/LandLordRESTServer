@@ -18,34 +18,35 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.landlordapp.webservice.data.UserDAO;
-import com.landlordapp.webservice.domain.User;
+import com.landlordapp.webservice.data.PropertyDAO;
+import com.landlordapp.webservice.domain.Property;
 
-public class UserServiceITest {
+public class PropertyServiceITest {
 	@Mock
-	private UserDAO userDAO;
+	private PropertyDAO propertyDAO;
 	@InjectMocks
-	private UserServiceI service;
+	private PropertyServiceI service;
 	private String idString = "1001";
+	private String mortgageString = "1234.56";
 	private Long id = 1001L;
-	private User user;
-	private JSONObject jsonUser;
+	private Property property;
+	private JSONObject jsonProperty;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		service = new UserServiceI();
-		user = new User();
-		jsonUser = new JSONObject();
-		jsonUser.put("id", idString);
-		jsonUser.put("email", "email");
-		jsonUser.put("password", "password");
+		service = new PropertyServiceI();
+		property = new Property();
+		jsonProperty = new JSONObject();
+		jsonProperty.put("id", idString);
+		jsonProperty.put("address", "address");
+		jsonProperty.put("mortgage", mortgageString);
 		MockitoAnnotations.initMocks(this);
 	}
 	
 	@Test
 	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException {
-		user.setId(id);
-		when(userDAO.findById(id)).thenReturn(user);
+		property.setId(id);
+		when(propertyDAO.findById(id)).thenReturn(property);
 		
 		JSONObject object = service.findOne(idString);
 		assertEquals(object.get("id"), id);
@@ -53,7 +54,7 @@ public class UserServiceITest {
 	
 	@Test
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException {
-		when(userDAO.findById(id)).thenReturn(null);
+		when(propertyDAO.findById(id)).thenReturn(null);
 		
 		JSONObject object = service.findOne(idString);
 		assertNull(object);
@@ -61,44 +62,44 @@ public class UserServiceITest {
 	
 	@Test
 	public void createUserShouldCallSaveUser() throws JSONException {
-		user.setId(id);
+		property.setId(id);
 		
-		when(userDAO.save(any(User.class))).thenReturn(user);
-		JSONObject actual = service.create(jsonUser);
+		when(propertyDAO.save(any(Property.class))).thenReturn(property);
+		JSONObject actual = service.create(jsonProperty);
 		
 		assertEquals(actual.get("id"), id);
 	}
 	
 	@Test
 	public void findAllShouldCallFindAll() throws JSONException {
-		List<User> list = new ArrayList<User>();
-		User user = new User();
-		user.setEmail("email");
-		user.setPassword("password");
-		user.setId(1L);
-		list.add(user);
+		List<Property> list = new ArrayList<Property>();
+		Property property = new Property();
+		property.setAddress("address");
+		property.setMortgage(1234.56D);
+		property.setId(1L);
+		list.add(property);
 		
-		when(userDAO.findAll()).thenReturn(list);
+		when(propertyDAO.findAll()).thenReturn(list);
 		JSONArray actual = service.findAll();
 		
 		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
-		assertEquals("email", actual.getJSONObject(0).get("email"));
-		assertEquals("password", actual.getJSONObject(0).get("password"));
+		assertEquals("address", actual.getJSONObject(0).get("address"));
+		assertEquals(new Double(1234.56), actual.getJSONObject(0).get("mortgage"));
 	}
 	
 	@Test
 	public void updateUserShouldCallSaveUser() throws JSONException {
-		user.setId(id);
+		property.setId(id);
 		
-		when(userDAO.save(any(User.class))).thenReturn(user);
-		JSONObject actual = service.update(jsonUser);
+		when(propertyDAO.save(any(Property.class))).thenReturn(property);
+		JSONObject actual = service.update(jsonProperty);
 		
 		assertEquals(actual.get("id"), id);
 	}
 	
 	@Test
 	public void deleteUserShouldCallDelete() throws JSONException {
-		service.delete(jsonUser);
-		verify(userDAO).delete(any(User.class));
+		service.delete(jsonProperty);
+		verify(propertyDAO).delete(any(Property.class));
 	}
 }

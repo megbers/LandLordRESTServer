@@ -5,6 +5,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -66,4 +69,21 @@ public class UserDAOTest {
 		doThrow(new RuntimeException()).when(template).delete(user);
 		dao.delete(user);
 	}
+	
+
+	@Test 
+	public void findAllShouldFindUsers() {
+		List<User> list = new ArrayList<User>();
+		when(template.find("from com.landlordapp.webservice.domain.User")).thenReturn(list);
+		List<User> actual = dao.findAll();
+		verify(template).find("from com.landlordapp.webservice.domain.User");
+		assertEquals(actual, list);
+	}
+	
+	@Test(expected = RuntimeException.class) 
+	public void findAllShouldThrowExceptionIfRaised() {
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.User");
+		dao.findAll();
+	}
+	
 }
