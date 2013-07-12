@@ -18,26 +18,22 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "person", catalog = "landlord")
 public class Person extends BaseEntity implements Serializable{
-	private static final long serialVersionUID = 7431261201492849084L;
-	private Long id;
-	private String name;
-	private String phone;
-	private String email;
-	private Property property;
+	public static final long serialVersionUID = 7431261201492849084L;
+	public Long id;
+	public String name;
+	public String phone;
+	public String email;
+	public Property property;
 	
 	public Person() {
 		
 	}
 	
 	public Person(JSONObject json) throws JSONException {
-		try{
-			this.id = json.getLong("id");
-		} catch(JSONException e) {
-			//Don't need to do anything
-		}
-		this.name = json.getString("name");
-		this.phone = json.getString("phone");
-		this.email = json.getString("email");
+		this.id = getLong(json, "id");
+		this.name = getString(json, "name");
+		this.phone = getString(json, "phone");
+		this.email = getString(json, "email");
 	}
 	
 	@GenericGenerator(name = "generator", strategy = "increment")

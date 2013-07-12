@@ -36,7 +36,7 @@ public class PropertyResourceTest {
 	}
 
 	@Test
-	public void findAllShouldReturnJSONArray() throws JSONException {
+	public void findAllShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray users = new JSONArray();
 		when(service.findAll()).thenReturn(users);
 		JSONArray actual = resource.findAllProperties();
@@ -45,35 +45,35 @@ public class PropertyResourceTest {
 	
 	
 	@Test
-	public void findUserShouldReturnUserId() throws JSONException {
+	public void findUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeProperty);
 		JSONObject user = resource.findProperty(id);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void findUserShouldReturnNullIfNotFound() throws JSONException {
+	public void findUserShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(null);
 		JSONObject user = resource.findProperty(id);
 		assertNull(user);
 	}
 	
 	@Test
-	public void createUserShouldReturnUserId() throws JSONException {
+	public void createUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeProperty)).thenReturn(fakeProperty);
 		JSONObject user = resource.createProperty(fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void updateUserUserShouldReturnUser() throws JSONException {
+	public void updateUserUserShouldReturnUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeProperty)).thenReturn(fakeProperty);
 		JSONObject user = resource.updateProperty(fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void deleteUserShouldDeleteUser() throws JSONException {
+	public void deleteUserShouldDeleteUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeProperty);
 		JSONObject json = resource.deleteProperty(id);
 		verify(service).delete(fakeProperty);

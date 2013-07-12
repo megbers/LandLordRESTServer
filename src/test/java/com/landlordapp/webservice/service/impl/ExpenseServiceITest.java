@@ -18,42 +18,44 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.landlordapp.webservice.data.UserDAO;
-import com.landlordapp.webservice.domain.User;
+import com.landlordapp.webservice.data.ExpenseDAO;
+import com.landlordapp.webservice.domain.Expense;
 
-public class UserServiceITest {
+public class ExpenseServiceITest {
 	@Mock
-	private UserDAO userDAO;
+	private ExpenseDAO expenseDAO;
 	@InjectMocks
-	private UserServiceI service;
+	private ExpenseServiceI service;
 	private String idString = "1001";
+	private String amountPaid = "1234.56";
+	private String amountTotal = "7890.0";
 	private Long id = 1001L;
-	private User user;
-	private JSONObject jsonUser;
+	private Expense expense;
+	private JSONObject jsonExpense;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		service = new UserServiceI();
-		user = new User();
-		jsonUser = new JSONObject();
-		jsonUser.put("id", idString);
-		jsonUser.put("email", "email");
-		jsonUser.put("password", "password");
+		service = new ExpenseServiceI();
+		expense = new Expense();
+		jsonExpense = new JSONObject();
+		jsonExpense.put(Expense.ID, idString);
+		jsonExpense.put(Expense.AMOUNT_TOTAL, amountTotal);
+		jsonExpense.put(Expense.AMOUNT_PAID, amountPaid);
 		MockitoAnnotations.initMocks(this);
 	}
 	
 	@Test
 	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		user.setId(id);
-		when(userDAO.findById(id)).thenReturn(user);
+		expense.setId(id);
+		when(expenseDAO.findById(id)).thenReturn(expense);
 		
 		JSONObject object = service.findOne(idString);
-		assertEquals(object.get("id"), id);
+		assertEquals(object.get(Expense.ID), id);
 	}
 	
 	@Test
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(userDAO.findById(id)).thenReturn(null);
+		when(expenseDAO.findById(id)).thenReturn(null);
 		
 		JSONObject object = service.findOne(idString);
 		assertNull(object);
@@ -61,44 +63,44 @@ public class UserServiceITest {
 	
 	@Test
 	public void createUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		user.setId(id);
+		expense.setId(id);
 		
-		when(userDAO.save(any(User.class))).thenReturn(user);
-		JSONObject actual = service.create(jsonUser);
+		when(expenseDAO.save(any(Expense.class))).thenReturn(expense);
+		JSONObject actual = service.create(jsonExpense);
 		
-		assertEquals(actual.get("id"), id);
+		assertEquals(actual.get(Expense.ID), id);
 	}
 	
 	@Test
 	public void findAllShouldCallFindAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<User> list = new ArrayList<User>();
-		User user = new User();
-		user.setEmail("email");
-		user.setPassword("password");
-		user.setId(1L);
-		list.add(user);
+		List<Expense> list = new ArrayList<Expense>();
+		Expense expense = new Expense();
+		expense.setAmountTotal(7890D);
+		expense.setAmountPaid(1234.56D);
+		expense.setId(1L);
+		list.add(expense);
 		
-		when(userDAO.findAll()).thenReturn(list);
+		when(expenseDAO.findAll()).thenReturn(list);
 		JSONArray actual = service.findAll();
 		
-		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
-		assertEquals("email", actual.getJSONObject(0).get("email"));
-		assertEquals("password", actual.getJSONObject(0).get("password"));
+		assertEquals(new Long(1), actual.getJSONObject(0).get(Expense.ID));
+		assertEquals(amountTotal, actual.getJSONObject(0).getString(Expense.AMOUNT_TOTAL));
+		assertEquals(amountPaid, actual.getJSONObject(0).getString(Expense.AMOUNT_PAID));
 	}
 	
 	@Test
 	public void updateUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		user.setId(id);
+		expense.setId(id);
 		
-		when(userDAO.save(any(User.class))).thenReturn(user);
-		JSONObject actual = service.update(jsonUser);
+		when(expenseDAO.save(any(Expense.class))).thenReturn(expense);
+		JSONObject actual = service.update(jsonExpense);
 		
-		assertEquals(actual.get("id"), id);
+		assertEquals(actual.get(Expense.ID), id);
 	}
 	
 	@Test
 	public void deleteUserShouldCallDelete() throws JSONException {
-		service.delete(jsonUser);
-		verify(userDAO).delete(any(User.class));
+		service.delete(jsonExpense);
+		verify(expenseDAO).delete(any(Expense.class));
 	}
 }

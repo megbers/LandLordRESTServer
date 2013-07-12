@@ -1,16 +1,19 @@
 package com.landlordapp.webservice.domain;
 
+import static javax.persistence.FetchType.EAGER;
+
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,45 +21,60 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "property", catalog = "landlord")
 public class Property extends BaseEntity implements java.io.Serializable {
-	private static final long serialVersionUID = -3997672036235921630L;
-	private Long id;
-	private String address;
-	private Double mortgage;
-	private Double tax;
-	private List<Person> tenants;
-	private Boolean escrow;
-	private Double securityDeposite;
-	private Double petDeposite;
-	private Double currentRent;
-	private Date rentPermit;
-	private Date leaseStart;
-	private Date leaseEnd;
-	private String imageLocation;
+	public static final String CURRENT_RENT = "currentRent";
+	public static final String IMAGE_LOCATION = "imageLocation";
+	public static final String LEASE_END = "leaseEnd";
+	public static final String LEASE_START = "leaseStart";
+	public static final String RENT_PERMIT = "rentPermit";
+	public static final String PET_DEPOSITE = "petDeposite";
+	public static final String SECURITY_DEPOSITE = "securityDeposite";
+	public static final String ESCROW = "escrow";
+	public static final String TAX = "tax";
+	public static final String MORTGAGE = "mortgage";
+	public static final String ADDRESS = "address";
+	public static final String ID = "id";
+	
+	public static final long serialVersionUID = -3997672036235921630L;
+	public Long id;
+	public String address;
+	public Double mortgage;
+	public Double tax;
+	public Set<Person> tenants = new HashSet<Person>();
+	public Set<Expense> expense = new HashSet<Expense>();
+	public Boolean escrow;
+	public Double securityDeposite;
+	public Double petDeposite;
+	public Double currentRent;
+	public Date rentPermit;
+	public Date leaseStart;
+	public Date leaseEnd;
+	public String imageLocation;
 	
 	public Property(){} 
 	
 	public Property(JSONObject json) throws JSONException {
-		this.id = getLong(json, "id");
-		this.address = getString(json, "address");
-		this.mortgage = getDouble(json, "mortgage");
-		this.tax = getDouble(json, "tax");
-		this.escrow = getBoolean(json, "escrow");
-		this.securityDeposite = getDouble(json, "securityDeposite");
-		this.petDeposite = getDouble(json, "petDeposite");
-		this.rentPermit = getDate(json, "rentPermit");
-		this.leaseStart = getDate(json, "leaseStart");
-		this.leaseEnd = getDate(json, "leaseEnd");
-		this.imageLocation = getString(json, "imageLocation");
-		this.currentRent = getDouble(json, "currentRent");
+		this.id = getLong(json, ID);
+		this.address = getString(json, ADDRESS);
+		this.mortgage = getDouble(json, MORTGAGE);
+		this.tax = getDouble(json, TAX);
+		this.escrow = getBoolean(json, ESCROW);
+		this.securityDeposite = getDouble(json, SECURITY_DEPOSITE);
+		this.petDeposite = getDouble(json, PET_DEPOSITE);
+		this.rentPermit = getDate(json, RENT_PERMIT);
+		this.leaseStart = getDate(json, LEASE_START);
+		this.leaseEnd = getDate(json, LEASE_END);
+		this.imageLocation = getString(json, IMAGE_LOCATION);
+		this.currentRent = getDouble(json, CURRENT_RENT);
 		//TODO Handle the tenants
 		//this. = get(json, "");
 		//private List<Person> tenants;
+		//TODO Handle the expenses
 	}
 	
 	@GenericGenerator(name = "generator", strategy = "increment")
 	@Id
 	@GeneratedValue(generator = "generator")
-	@Column(name = "id", unique = true, nullable = false)
+	@Column(name = ID, unique = true, nullable = false)
 	public Long getId() {
 		return this.id;
 	}
@@ -65,7 +83,7 @@ public class Property extends BaseEntity implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	@Column(name = "address", length = 50)
+	@Column(name = ADDRESS, length = 50)
 	public String getAddress() {
 		return address;
 	}
@@ -92,16 +110,27 @@ public class Property extends BaseEntity implements java.io.Serializable {
 		this.tax = tax;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "property")
-	public List<Person> getTenants() {
+	//TODO Make this LAZY again
+	@OneToMany(fetch = EAGER, mappedBy = "property")
+	public Set<Person> getTenants() {
 		return tenants;
 	}
 
-	public void setTenants(List<Person> tenants) {
+	public void setTenants(Set<Person> tenants) {
 		this.tenants = tenants;
 	}
 
-	@Column(name = "escrow")
+	//TODO Make this LAZY again
+	@OneToMany(fetch = EAGER, mappedBy = "property")
+	public Set<Expense> getExpense() {
+		return expense;
+	}
+
+	public void setExpense(Set<Expense> expense) {
+		this.expense = expense;
+	}
+
+	@Column(name = ESCROW)
 	public Boolean getEscrow() {
 		return escrow;
 	}
@@ -119,7 +148,7 @@ public class Property extends BaseEntity implements java.io.Serializable {
 		this.securityDeposite = securityDeposite;
 	}
 
-	@Column(name = "petDeposite")
+	@Column(name = PET_DEPOSITE)
 	public Double getPetDeposite() {
 		return petDeposite;
 	}
@@ -175,21 +204,26 @@ public class Property extends BaseEntity implements java.io.Serializable {
 
 	public JSONObject toJSONObject() throws JSONException {
 		JSONObject object = new JSONObject();
-		object.put("id", id);
+		object.put(ID, id);
 		
-		object.put("address", address);
-		object.put("mortgage", mortgage);
-		object.put("tax", tax);
-		//TODO Deal with Tenants
-		//object.put("tenants", tenants);
-		object.put("escrow", escrow);
-		object.put("securityDeposite", securityDeposite);
-		object.put("petDeposite", petDeposite);
-		object.put("rentPermit", formatDate(rentPermit));
-		object.put("leaseStart", formatDate(leaseStart));
-		object.put("leaseEnd", formatDate(leaseEnd));
-		object.put("imageLocation", imageLocation);
-		object.put("currentRent", currentRent);
+		object.put(ADDRESS, address);
+		object.put(MORTGAGE, mortgage);
+		object.put(TAX, tax);
+		object.put(ESCROW, escrow);
+		object.put(SECURITY_DEPOSITE, securityDeposite);
+		object.put(PET_DEPOSITE, petDeposite);
+		object.put(RENT_PERMIT, formatDate(rentPermit));
+		object.put(LEASE_START, formatDate(leaseStart));
+		object.put(LEASE_END, formatDate(leaseEnd));
+		object.put(IMAGE_LOCATION, imageLocation);
+		object.put(CURRENT_RENT, currentRent);
+		
+		JSONArray array = new JSONArray();
+		for(Person person:getTenants()) {
+			array.put(person.toJSONObject());
+		}
+		object.put("tenants", array);
+		
 		return object;
 	}
 	

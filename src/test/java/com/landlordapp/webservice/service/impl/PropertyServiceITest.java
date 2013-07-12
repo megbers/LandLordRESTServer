@@ -18,12 +18,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.landlordapp.webservice.data.PersonDAO;
 import com.landlordapp.webservice.data.PropertyDAO;
+import com.landlordapp.webservice.domain.Person;
 import com.landlordapp.webservice.domain.Property;
 
 public class PropertyServiceITest {
 	@Mock
 	private PropertyDAO propertyDAO;
+	@Mock
+	private PersonDAO personDAO;
 	@InjectMocks
 	private PropertyServiceI service;
 	private String idString = "1001";
@@ -44,7 +48,7 @@ public class PropertyServiceITest {
 	}
 	
 	@Test
-	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException {
+	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.setId(id);
 		when(propertyDAO.findById(id)).thenReturn(property);
 		
@@ -53,7 +57,7 @@ public class PropertyServiceITest {
 	}
 	
 	@Test
-	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException {
+	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(propertyDAO.findById(id)).thenReturn(null);
 		
 		JSONObject object = service.findOne(idString);
@@ -61,7 +65,7 @@ public class PropertyServiceITest {
 	}
 	
 	@Test
-	public void createUserShouldCallSaveUser() throws JSONException {
+	public void createUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.setId(id);
 		
 		when(propertyDAO.save(any(Property.class))).thenReturn(property);
@@ -71,7 +75,23 @@ public class PropertyServiceITest {
 	}
 	
 	@Test
-	public void findAllShouldCallFindAll() throws JSONException {
+	public void createPropertyShouldIncludeTenantIfItExists() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Long personId = new Long(100);
+		jsonProperty.put("tenant", personId);
+		
+		Person person = new Person();
+		person.setId(personId);
+		property.getTenants().add(person);
+		
+		when(personDAO.findById(personId)).thenReturn(person);
+		when(propertyDAO.save(any(Property.class))).thenReturn(property);
+		JSONObject actual = service.create(jsonProperty);
+		
+		assertEquals(new Long(actual.getJSONArray("tenants").getJSONObject(0).getLong("id")), personId);
+	}
+	
+	@Test
+	public void findAllShouldCallFindAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		List<Property> list = new ArrayList<Property>();
 		Property property = new Property();
 		property.setAddress("address");
@@ -88,7 +108,7 @@ public class PropertyServiceITest {
 	}
 	
 	@Test
-	public void updateUserShouldCallSaveUser() throws JSONException {
+	public void updateUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.setId(id);
 		
 		when(propertyDAO.save(any(Property.class))).thenReturn(property);

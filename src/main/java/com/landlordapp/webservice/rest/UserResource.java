@@ -30,7 +30,7 @@ public class UserResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllUsers() throws JSONException {
+	public JSONArray findAllUsers() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = userService.findAll();
 		return response;
 	}
@@ -38,7 +38,7 @@ public class UserResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findUser(@PathParam("id") String id) throws JSONException {
+	public JSONObject findUser(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = userService.findOne(id);
 		return response;
 	}
@@ -46,7 +46,7 @@ public class UserResource {
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createUser(JSONObject user) throws JSONException {
+	public JSONObject createUser(JSONObject user) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newUser = userService.create(user);
 		return newUser;
 	}
@@ -54,7 +54,7 @@ public class UserResource {
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updateUser(JSONObject user) throws JSONException {
+	public JSONObject updateUser(JSONObject user) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newUser = userService.update(user);
 		return newUser;
 	}
@@ -62,7 +62,7 @@ public class UserResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteUser(@FormParam("id") String id) throws JSONException {
+	public JSONObject deleteUser(@FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject user = userService.findOne(id);
 		userService.delete(user);
 		JSONObject object = new JSONObject();

@@ -36,7 +36,7 @@ public class UserResourceTest {
 	}
 
 	@Test
-	public void findAllShouldReturnJSONArray() throws JSONException {
+	public void findAllShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray users = new JSONArray();
 		when(service.findAll()).thenReturn(users);
 		JSONArray actual = resource.findAllUsers();
@@ -45,35 +45,35 @@ public class UserResourceTest {
 	
 	
 	@Test
-	public void findUserShouldReturnUserId() throws JSONException {
+	public void findUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeUser);
 		JSONObject user = resource.findUser(id);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void findUserShouldReturnNullIfNotFound() throws JSONException {
+	public void findUserShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(null);
 		JSONObject user = resource.findUser(id);
 		assertNull(user);
 	}
 	
 	@Test
-	public void createUserShouldReturnUserId() throws JSONException {
+	public void createUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeUser)).thenReturn(fakeUser);
 		JSONObject user = resource.createUser(fakeUser);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void updateUserUserShouldReturnUser() throws JSONException {
+	public void updateUserUserShouldReturnUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeUser)).thenReturn(fakeUser);
 		JSONObject user = resource.updateUser(fakeUser);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
-	public void deleteUserShouldDeleteUser() throws JSONException {
+	public void deleteUserShouldDeleteUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeUser);
 		JSONObject json = resource.deleteUser(id);
 		verify(service).delete(fakeUser);

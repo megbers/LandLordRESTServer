@@ -30,7 +30,7 @@ public class PropertyResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllProperties() throws JSONException {
+	public JSONArray findAllProperties() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = propertyService.findAll();
 		return response;
 	}
@@ -38,7 +38,7 @@ public class PropertyResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findProperty(@PathParam("id") String id) throws JSONException {
+	public JSONObject findProperty(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = propertyService.findOne(id);
 		return response;
 	}
@@ -46,7 +46,7 @@ public class PropertyResource {
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createProperty(JSONObject property) throws JSONException {
+	public JSONObject createProperty(JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newProperty = propertyService.create(property);
 		return newProperty;
 	}
@@ -54,7 +54,7 @@ public class PropertyResource {
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updateProperty(JSONObject property) throws JSONException {
+	public JSONObject updateProperty(JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newProperty = propertyService.update(property);
 		return newProperty;
 	}
@@ -62,7 +62,7 @@ public class PropertyResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteProperty(@FormParam("id") String id) throws JSONException {
+	public JSONObject deleteProperty(@FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.findOne(id);
 		propertyService.delete(property);
 		JSONObject object = new JSONObject();

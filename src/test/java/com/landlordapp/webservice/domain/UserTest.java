@@ -38,7 +38,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void toJSONObjectShouldReturnAJSONRepresentationOfObject() throws JSONException {
+	public void toJSONObjectShouldReturnAJSONRepresentationOfObject() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		User user = new User();
 		user.setId(parseLong(id));
 		user.setEmail(email);

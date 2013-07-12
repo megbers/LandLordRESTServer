@@ -14,7 +14,7 @@ public class UserServiceI implements UserService {
 	
 	private UserDAO userDAO;
 	
-	public JSONObject findOne(String id) throws JSONException {
+	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		User user = userDAO.findById(Long.parseLong(id));
 		if(user == null) {
 			return null;
@@ -22,12 +22,12 @@ public class UserServiceI implements UserService {
 		return user.toJSONObject();
 	}
 	
-	public JSONObject create(JSONObject jsonUser) throws JSONException {
+	public JSONObject create(JSONObject jsonUser) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		User user = new User(jsonUser);
 		return userDAO.save(user).toJSONObject();
 	}
 	
-	public JSONObject update(JSONObject jsonUser) throws JSONException {
+	public JSONObject update(JSONObject jsonUser) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		User user = new User(jsonUser);
 		return userDAO.save(user).toJSONObject();
 	}
@@ -41,7 +41,7 @@ public class UserServiceI implements UserService {
 		this.userDAO = userDAO;
 	}
 	
-	public JSONArray findAll() throws JSONException {
+	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		List<User> users = this.userDAO.findAll();
 		JSONArray userJSONArray = new JSONArray();
 		for(User user: users) {

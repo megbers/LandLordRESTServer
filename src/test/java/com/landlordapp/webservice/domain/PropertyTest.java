@@ -40,19 +40,19 @@ public class PropertyTest {
 	@Before
 	public void setUp() throws JSONException {
 		jsonProperty = new JSONObject();
-		jsonProperty.put("address", ADDRESS);
-		jsonProperty.put("mortgage", MORTGAGE_ST);
-		jsonProperty.put("tax", TAX_ST);
+		jsonProperty.put(Property.ADDRESS, ADDRESS);
+		jsonProperty.put(Property.MORTGAGE, MORTGAGE_ST);
+		jsonProperty.put(Property.TAX, TAX_ST);
 		//TODO Deal with Tenants
 		//object.put("tenants", tenants);
-		jsonProperty.put("escrow", ESCROW_ST);
-		jsonProperty.put("securityDeposite", SECURITY_ST);
-		jsonProperty.put("petDeposite", PET_ST);
-		jsonProperty.put("rentPermit", PERMIT_ST);
-		jsonProperty.put("leaseStart", LEASE_START_ST);
-		jsonProperty.put("leaseEnd", LEASE_END_ST);
-		jsonProperty.put("imageLocation", IMAGE_LOCATION);
-		jsonProperty.put("currentRent", RENT_ST);
+		jsonProperty.put(Property.ESCROW, ESCROW_ST);
+		jsonProperty.put(Property.SECURITY_DEPOSITE, SECURITY_ST);
+		jsonProperty.put(Property.PET_DEPOSITE, PET_ST);
+		jsonProperty.put(Property.RENT_PERMIT, PERMIT_ST);
+		jsonProperty.put(Property.LEASE_START, LEASE_START_ST);
+		jsonProperty.put(Property.LEASE_END, LEASE_END_ST);
+		jsonProperty.put(Property.IMAGE_LOCATION, IMAGE_LOCATION);
+		jsonProperty.put(Property.CURRENT_RENT, RENT_ST);
 	}
 	
 	@Test 
@@ -124,21 +124,21 @@ public class PropertyTest {
 	}
 	
 	@Test
-	public void toJSONObjectShouldReturnAJSONRepresentationOfObject() throws JSONException {
+	public void toJSONObjectShouldReturnAJSONRepresentationOfObject() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Property property = new Property(jsonProperty);
 		JSONObject actual = property.toJSONObject();
 		
-		assertEquals(actual.getString("address"), ADDRESS);
-		assertEquals(actual.getString("mortgage"), MORTGAGE_ST);
-		assertEquals(actual.getString("tax"), TAX_ST);
-		assertEquals(actual.getString("imageLocation"), IMAGE_LOCATION);
-		assertEquals(actual.getString("petDeposite"), PET_ST);
-		assertEquals(actual.getString("securityDeposite"), SECURITY_ST);
-		assertEquals(actual.getString("leaseStart"), LEASE_START_ST);
-		assertEquals(actual.getString("leaseEnd"), LEASE_END_ST);
-		assertEquals(actual.getString("rentPermit"), PERMIT_ST);
-		assertEquals(actual.getString("escrow"), ESCROW_ST);
-		assertEquals(actual.getString("currentRent"), RENT_ST);
+		assertEquals(actual.getString(Property.ADDRESS), ADDRESS);
+		assertEquals(actual.getString(Property.MORTGAGE), MORTGAGE_ST);
+		assertEquals(actual.getString(Property.TAX), TAX_ST);
+		assertEquals(actual.getString(Property.IMAGE_LOCATION), IMAGE_LOCATION);
+		assertEquals(actual.getString(Property.PET_DEPOSITE), PET_ST);
+		assertEquals(actual.getString(Property.SECURITY_DEPOSITE), SECURITY_ST);
+		assertEquals(actual.getString(Property.LEASE_START), LEASE_START_ST);
+		assertEquals(actual.getString(Property.LEASE_END), LEASE_END_ST);
+		assertEquals(actual.getString(Property.RENT_PERMIT), PERMIT_ST);
+		assertEquals(actual.getString(Property.ESCROW), ESCROW_ST);
+		assertEquals(actual.getString(Property.CURRENT_RENT), RENT_ST);
 	}
 	
 }
