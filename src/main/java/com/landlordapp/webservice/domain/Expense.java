@@ -28,6 +28,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public static final String AMOUNT_PAID = "amountPaid";
 	public static final String AMOUNT_TOTAL = "amountTotal";
 	public static final String ID = "id";
+	public static final String DESCRIPTION = "description";
 	
 	public Long id;
 	public Double amountTotal;
@@ -37,6 +38,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public Date enteredDate;
 	public Date dueDate;
 	public Date paidDate;
+	public String description;
 	
 	public Expense() {}
 	
@@ -49,6 +51,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.enteredDate = getDate(json, ENTERED_DATE);
 		this.dueDate = getDate(json, DUE_DATE);
 		this.paidDate = getDate(json, PAID_DATE);
+		this.description = getString(json, DESCRIPTION);
 	}
 	
 	@GenericGenerator(name = "generator", strategy = "increment")
@@ -117,7 +120,16 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.paidDate = paidDate;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "property_id", nullable = true)
 	public Property getProperty() {
 		return property;
@@ -137,13 +149,13 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		object.put(ENTERED_DATE, formatDate(enteredDate));
 		object.put(DUE_DATE, formatDate(dueDate));
 		object.put(PAID_DATE, formatDate(paidDate));
+		object.put(DESCRIPTION, description);
 		
 		if(property != null) {
 			object.put(PROPERTY, property.toJSONObject());
 		}
 		
 		return object;
-		
 	}
 
 }

@@ -89,6 +89,24 @@ public class ExpenseServiceITest {
 	}
 	
 	@Test
+	public void findByPropertyShouldCallFindAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Long propertyId = 1L;
+		List<Expense> list = new ArrayList<Expense>();
+		Expense expense = new Expense();
+		expense.setAmountTotal(7890D);
+		expense.setAmountPaid(1234.56D);
+		expense.setId(1L);
+		list.add(expense);
+		
+		when(expenseDAO.findByProperty(propertyId)).thenReturn(list);
+		JSONArray actual = service.findByProperty(propertyId);
+		
+		assertEquals(new Long(1), actual.getJSONObject(0).get(Expense.ID));
+		assertEquals(amountTotal, actual.getJSONObject(0).getString(Expense.AMOUNT_TOTAL));
+		assertEquals(amountPaid, actual.getJSONObject(0).getString(Expense.AMOUNT_PAID));
+	}
+	
+	@Test
 	public void updateUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		expense.setId(id);
 		

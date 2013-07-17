@@ -53,4 +53,14 @@ public class ExpenseServiceI implements ExpenseService {
 		}
 		return expenseJSONArray;
 	}
+	
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public JSONArray findByProperty(Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Expense> expenses = this.expenseDAO.findByProperty(propertyId);
+		JSONArray expenseJSONArray = new JSONArray();
+		for(Expense expense: expenses) {
+			expenseJSONArray.put(expense.toJSONObject());
+		}
+		return expenseJSONArray;
+	}
 }

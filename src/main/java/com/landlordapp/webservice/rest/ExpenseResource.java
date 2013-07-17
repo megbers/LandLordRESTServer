@@ -36,6 +36,14 @@ public class ExpenseResource {
 	}
 	
 	@GET
+	@Path("findByProperty/{propertyId}")
+	@Produces(APPLICATION_JSON)
+	public JSONArray findExpensesByProperty(@PathParam("propertyId") Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONArray response = expenseService.findByProperty(propertyId);
+		return response;
+	}
+	
+	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
 	public JSONObject findExpense(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {

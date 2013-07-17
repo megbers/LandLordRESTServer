@@ -85,4 +85,24 @@ public class ExpenseDAOTest {
 		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Expense");
 		dao.findAll();
 	}
+	
+	@Test
+	public void findByPropertyShouldReturnListOfExpenses() {
+		Long propertyId = 1L;
+		List<Expense> list = new ArrayList<Expense>();
+		Object[] values = {propertyId};
+		when(template.find("from Expense as model where model.property.id= ?", values)).thenReturn(list);
+		List<Expense> actual = dao.findByProperty(propertyId);
+		verify(template).find("from Expense as model where model.property.id= ?", values);
+		assertEquals(actual, list);
+	}
+	
+	@Test(expected = RuntimeException.class) 
+	public void findByPropertyShouldThrowExceptionIfRaised() {
+		Long propertyId = 1L;
+		List<Expense> list = new ArrayList<Expense>();
+		Object[] values = {propertyId};
+		doThrow(new RuntimeException()).when(template).find("from Expense as model where model.property.id= ?", values);
+		dao.findByProperty(propertyId);
+	}
 }

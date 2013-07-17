@@ -27,6 +27,7 @@ public class ExpenseTest {
 	public static final String DUEDATE_ST = "10-10-2011";
 	public static final Date PAIDDATE = new Date(112, 9, 10);
 	public static final String PAIDDATE_ST = "10-10-2012";
+	public static final String DESCRIPTION = "description";
 	
 	private JSONObject jsonExpense;
 	
@@ -39,6 +40,7 @@ public class ExpenseTest {
 		jsonExpense.put(Expense.ENTERED_DATE, ENTEREDDATE_ST);
 		jsonExpense.put(Expense.PAID, PAID_ST);
 		jsonExpense.put(Expense.PAID_DATE, PAIDDATE_ST);
+		jsonExpense.put(Expense.DESCRIPTION, DESCRIPTION);
 	}
 	
 	@Test 
@@ -52,6 +54,7 @@ public class ExpenseTest {
 		expense.setPaid(PAID);
 		expense.setPaidDate(PAIDDATE);
 		expense.setProperty(PROPERTY);
+		expense.setDescription(DESCRIPTION);
 		
 		
 		assertEquals(expense.getAmountPaid(), AMOUNTPAID);
@@ -62,6 +65,7 @@ public class ExpenseTest {
 		assertEquals(expense.getPaidDate(), PAIDDATE);
 		assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
+		assertEquals(expense.getDescription(), DESCRIPTION);
 	}
 	
 	@Test
@@ -76,6 +80,7 @@ public class ExpenseTest {
 		assertEquals(expense.getPaidDate(), PAIDDATE);
 		//assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
+		assertEquals(expense.getDescription(), DESCRIPTION);
 	}
 	
 	@Test
@@ -88,6 +93,7 @@ public class ExpenseTest {
 		assertEquals(expense.getPaid(), PAID);
 		assertEquals(expense.getPaidDate(), PAIDDATE);
 		//assertEquals(expense.getProperty(), PROPERTY);
+		assertEquals(expense.getDescription(), DESCRIPTION);
 	}
 	
 	@Test
@@ -103,6 +109,7 @@ public class ExpenseTest {
 		assertEquals(actual.getString(Expense.ID), ID_ST);
 		assertEquals(actual.getString(Expense.PAID), PAID_ST);
 		assertEquals(actual.getString(Expense.PAID_DATE), PAIDDATE_ST);
+		assertEquals(actual.getString(Expense.DESCRIPTION), DESCRIPTION);
 	}
 	
 	@Test

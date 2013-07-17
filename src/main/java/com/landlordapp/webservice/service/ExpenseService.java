@@ -18,4 +18,7 @@ public interface ExpenseService {
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException;
+	
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public JSONArray findByProperty(Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException;
 }

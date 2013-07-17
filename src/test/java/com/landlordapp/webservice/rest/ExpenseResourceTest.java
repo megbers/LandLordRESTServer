@@ -40,6 +40,15 @@ public class ExpenseResourceTest {
 		assertEquals(expenses, actual);
 	}
 	
+	@Test
+	public void findByPropertyShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Long propertyId = 1L;
+		JSONArray expenses = new JSONArray();
+		when(service.findByProperty(propertyId)).thenReturn(expenses);
+		JSONArray actual = resource.findExpensesByProperty(propertyId);
+		assertEquals(expenses, actual);
+	}
+	
 	
 	@Test
 	public void findExpenseShouldReturnExpenseId() throws JSONException, IllegalArgumentException, IllegalAccessException {

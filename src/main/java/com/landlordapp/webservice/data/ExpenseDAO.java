@@ -46,4 +46,15 @@ public class ExpenseDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+	
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public List findByProperty(Long propertyId){
+		try {
+			String queryString = "from Expense as model where model.property.id= ?";
+			Object[] values = {propertyId};
+			return getHibernateTemplate().find(queryString, values);
+		} catch (RuntimeException re) {
+			throw re;
+		}
+	}
 }
