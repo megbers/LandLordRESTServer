@@ -84,6 +84,35 @@ public class BaseEntityTest {
 	}
 	
 	@Test
+	@SuppressWarnings("deprecation")
+	public void getDateShouldFormatDateWithPassedInFormat() throws JSONException {
+		String value = "2010-12-10";
+		Date date = new Date(110, 11, 10);
+		json.put(KEY, value);
+		assertEquals(entity.getDate(json, KEY, "yyyy-MM-dd"), date);
+	}
+	
+	
+	@Test
+	@SuppressWarnings("deprecation")
+	public void formateDateShouldReturnDateWithDefaultValue() throws JSONException {
+		String value = "10-10-2010";
+		Date date = new Date(110, 9, 10);
+		json.put(KEY, value);
+		assertEquals(entity.formatDate(date), value);
+	}
+	
+	@Test
+	@SuppressWarnings("deprecation")
+	public void formateDateShouldFormatDateWithPassedInFormat() throws JSONException {
+		String value = "2010-12-10";
+		Date date = new Date(110, 11, 10);
+		json.put(KEY, value);
+		assertEquals(entity.formatDate(date, "yyyy-MM-dd"), value);
+	}
+	
+	
+	@Test
 	public void setvShouldReturnNullIfKeyNotPresent() {
 		assertNull(entity.getDate(json, KEY));
 	}

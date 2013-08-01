@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.landlordapp.webservice.data.PersonDAO;
 import com.landlordapp.webservice.domain.Person;
+import com.landlordapp.webservice.domain.type.PersonType;
 
 public class PersonServiceITest {
 	@Mock
@@ -40,6 +41,7 @@ public class PersonServiceITest {
 		jsonPerson.put("email", "email");
 		jsonPerson.put("phone", "phone");
 		jsonPerson.put("name", "name");
+		jsonPerson.put("type", PersonType.TENANT);
 		MockitoAnnotations.initMocks(this);
 	}
 	

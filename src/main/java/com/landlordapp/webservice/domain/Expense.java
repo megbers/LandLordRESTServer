@@ -47,11 +47,20 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.amountTotal = getDouble(json, AMOUNT_TOTAL);
 		this.amountPaid = getDouble(json, AMOUNT_PAID);
 		this.paid = getBoolean(json, PAID);
-		//TODO Handle Property
-		this.enteredDate = getDate(json, ENTERED_DATE);
-		this.dueDate = getDate(json, DUE_DATE);
-		this.paidDate = getDate(json, PAID_DATE);
+		this.enteredDate = getDate(json, ENTERED_DATE, "yyyy-MM-dd");
+		this.dueDate = getDate(json, DUE_DATE, "yyyy-MM-dd");
+		this.paidDate = getDate(json, PAID_DATE, "yyyy-MM-dd");
 		this.description = getString(json, DESCRIPTION);
+		
+		//TODO Handle Property
+		//Should I have the front end submit the entire property, too?
+		try {
+			this.property = new Property(json.getJSONObject(PROPERTY));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//this.property.setId(getLong(json, PROPERTY));
 	}
 	
 	@GenericGenerator(name = "generator", strategy = "increment")
@@ -146,9 +155,9 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		object.put(AMOUNT_TOTAL, amountTotal);
 		object.put(AMOUNT_PAID, amountPaid);
 		object.put(PAID, paid);
-		object.put(ENTERED_DATE, formatDate(enteredDate));
-		object.put(DUE_DATE, formatDate(dueDate));
-		object.put(PAID_DATE, formatDate(paidDate));
+		object.put(ENTERED_DATE, formatDate(enteredDate, "yyyy-MM-dd"));
+		object.put(DUE_DATE, formatDate(dueDate, "yyyy-MM-dd"));
+		object.put(PAID_DATE, formatDate(paidDate, "yyyy-MM-dd"));
 		object.put(DESCRIPTION, description);
 		
 		if(property != null) {

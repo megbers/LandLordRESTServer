@@ -40,7 +40,11 @@ public abstract class BaseEntity {
 	}
 	
 	public Date getDate(JSONObject json, String key) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		return getDate(json, key, "dd-MM-yyyy");
+	}
+	
+	public Date getDate(JSONObject json, String key, String dateFormat) {
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 		try {
 			return sdf.parse(json.getString(key));
 		} catch (Exception e) {
@@ -48,13 +52,17 @@ public abstract class BaseEntity {
 		}
 	}
 	
-	protected String formatDate(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	protected String formatDate(Date date, String dateFormate) {
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormate);
 		try {
 			return sdf.format(date);
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	protected String formatDate(Date date) {
+		return formatDate(date, "dd-MM-yyyy");
 	}
 	
 	public abstract JSONObject toJSONObject() throws JSONException;

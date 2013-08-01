@@ -22,12 +22,14 @@ public class ExpenseTest {
 	public static final Property PROPERTY = new Property();
 	public static final String PROPERTY_ST = "";
 	public static final Date ENTEREDDATE = new Date(110, 9, 10);
-	public static final String ENTEREDDATE_ST = "10-10-2010";
+	public static final String ENTEREDDATE_ST = "2010-10-10";
 	public static final Date DUEDATE = new Date(111, 9, 10);
-	public static final String DUEDATE_ST = "10-10-2011";
+	public static final String DUEDATE_ST = "2011-10-10";
 	public static final Date PAIDDATE = new Date(112, 9, 10);
-	public static final String PAIDDATE_ST = "10-10-2012";
+	public static final String PAIDDATE_ST = "2012-10-10";
 	public static final String DESCRIPTION = "description";
+	public static final Long PROPERTY_ID = 300L;
+	public static final String PROPERTY_ID_ST = "{id: 300}";
 	
 	private JSONObject jsonExpense;
 	
@@ -41,6 +43,7 @@ public class ExpenseTest {
 		jsonExpense.put(Expense.PAID, PAID_ST);
 		jsonExpense.put(Expense.PAID_DATE, PAIDDATE_ST);
 		jsonExpense.put(Expense.DESCRIPTION, DESCRIPTION);
+		jsonExpense.put(Expense.PROPERTY, new JSONObject(PROPERTY_ID_ST));
 	}
 	
 	@Test 
@@ -55,7 +58,9 @@ public class ExpenseTest {
 		expense.setPaidDate(PAIDDATE);
 		expense.setProperty(PROPERTY);
 		expense.setDescription(DESCRIPTION);
-		
+		Property property = new Property();
+		property.setId(PROPERTY_ID);
+		expense.setProperty(property);
 		
 		assertEquals(expense.getAmountPaid(), AMOUNTPAID);
 		assertEquals(expense.getAmountTotal(), AMOUNTTOTAL);
@@ -63,9 +68,10 @@ public class ExpenseTest {
 		assertEquals(expense.getEnteredDate(), ENTEREDDATE);
 		assertEquals(expense.getPaid(), PAID);
 		assertEquals(expense.getPaidDate(), PAIDDATE);
-		assertEquals(expense.getProperty(), PROPERTY);
+		//assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
+		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
 	}
 	
 	@Test
@@ -92,7 +98,7 @@ public class ExpenseTest {
 		assertEquals(expense.getEnteredDate(), ENTEREDDATE);
 		assertEquals(expense.getPaid(), PAID);
 		assertEquals(expense.getPaidDate(), PAIDDATE);
-		//assertEquals(expense.getProperty(), PROPERTY);
+		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
 	}
 	

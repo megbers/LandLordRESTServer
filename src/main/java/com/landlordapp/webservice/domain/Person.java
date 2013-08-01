@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +17,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.landlordapp.webservice.domain.type.PersonType;
+
 @Entity
 @Table(name = "person", catalog = "landlord")
 public class Person extends BaseEntity implements Serializable{
@@ -24,6 +28,7 @@ public class Person extends BaseEntity implements Serializable{
 	public String phone;
 	public String email;
 	public Property property;
+	public PersonType type;
 	
 	public Person() {
 		
@@ -34,6 +39,7 @@ public class Person extends BaseEntity implements Serializable{
 		this.name = getString(json, "name");
 		this.phone = getString(json, "phone");
 		this.email = getString(json, "email");
+		this.type = PersonType.valueOf(json.getString("type"));
 	}
 	
 	@GenericGenerator(name = "generator", strategy = "increment")
@@ -75,6 +81,15 @@ public class Person extends BaseEntity implements Serializable{
 		this.email = email;
 	}
 	
+	@Enumerated(EnumType.STRING)
+	public PersonType getType() {
+		return type;
+	}
+
+	public void setType(PersonType type) {
+		this.type = type;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "property_id", nullable = true)
 	public Property getProperty() {
@@ -91,6 +106,7 @@ public class Person extends BaseEntity implements Serializable{
 		object.put("name", name);
 		object.put("phone", phone);
 		object.put("email", email);
+		object.put("type", type);
 		return object;
 	}
 
