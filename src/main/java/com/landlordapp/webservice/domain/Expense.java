@@ -29,6 +29,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public static final String AMOUNT_TOTAL = "amountTotal";
 	public static final String ID = "id";
 	public static final String DESCRIPTION = "description";
+	public static final String EXPENSE_TYPE = "expenseType";
 	
 	public Long id;
 	public Double amountTotal;
@@ -39,6 +40,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public Date dueDate;
 	public Date paidDate;
 	public String description;
+	public String expenseType;
 	
 	public Expense() {}
 	
@@ -51,6 +53,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.dueDate = getDate(json, DUE_DATE, "yyyy-MM-dd");
 		this.paidDate = getDate(json, PAID_DATE, "yyyy-MM-dd");
 		this.description = getString(json, DESCRIPTION);
+		this.expenseType = getString(json, EXPENSE_TYPE);
 		
 		//TODO Handle Property
 		//Should I have the front end submit the entire property, too?
@@ -147,6 +150,15 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public void setProperty(Property property) {
 		this.property = property;
 	}
+	
+	@Column(name = "type")
+	public String getExpenseType() {
+		return expenseType;
+	}
+
+	public void setExpenseType(String expenseType) {
+		this.expenseType = expenseType;
+	}
 
 	@Override
 	public JSONObject toJSONObject() throws JSONException {
@@ -159,6 +171,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		object.put(DUE_DATE, formatDate(dueDate, "yyyy-MM-dd"));
 		object.put(PAID_DATE, formatDate(paidDate, "yyyy-MM-dd"));
 		object.put(DESCRIPTION, description);
+		object.put(EXPENSE_TYPE, expenseType);
 		
 		if(property != null) {
 			object.put(PROPERTY, property.toJSONObject());

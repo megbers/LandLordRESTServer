@@ -30,6 +30,7 @@ public class ExpenseTest {
 	public static final String DESCRIPTION = "description";
 	public static final Long PROPERTY_ID = 300L;
 	public static final String PROPERTY_ID_ST = "{id: 300}";
+	public static final String EXPENSE_TYPE = "type";
 	
 	private JSONObject jsonExpense;
 	
@@ -43,6 +44,7 @@ public class ExpenseTest {
 		jsonExpense.put(Expense.PAID, PAID_ST);
 		jsonExpense.put(Expense.PAID_DATE, PAIDDATE_ST);
 		jsonExpense.put(Expense.DESCRIPTION, DESCRIPTION);
+		jsonExpense.put(Expense.EXPENSE_TYPE, EXPENSE_TYPE);
 		jsonExpense.put(Expense.PROPERTY, new JSONObject(PROPERTY_ID_ST));
 	}
 	
@@ -58,6 +60,7 @@ public class ExpenseTest {
 		expense.setPaidDate(PAIDDATE);
 		expense.setProperty(PROPERTY);
 		expense.setDescription(DESCRIPTION);
+		expense.setExpenseType(EXPENSE_TYPE);
 		Property property = new Property();
 		property.setId(PROPERTY_ID);
 		expense.setProperty(property);
@@ -72,6 +75,7 @@ public class ExpenseTest {
 		assertEquals(expense.getId(), ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
 		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
+		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
 	}
 	
 	@Test
@@ -87,6 +91,7 @@ public class ExpenseTest {
 		//assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
+		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
 	}
 	
 	@Test
@@ -100,6 +105,7 @@ public class ExpenseTest {
 		assertEquals(expense.getPaidDate(), PAIDDATE);
 		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
+		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
 	}
 	
 	@Test
@@ -116,6 +122,7 @@ public class ExpenseTest {
 		assertEquals(actual.getString(Expense.PAID), PAID_ST);
 		assertEquals(actual.getString(Expense.PAID_DATE), PAIDDATE_ST);
 		assertEquals(actual.getString(Expense.DESCRIPTION), DESCRIPTION);
+		assertEquals(actual.getString(Expense.EXPENSE_TYPE), EXPENSE_TYPE);
 	}
 	
 	@Test
