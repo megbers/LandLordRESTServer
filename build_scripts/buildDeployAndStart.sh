@@ -1,19 +1,19 @@
 #!/bin/bash
 echo "==> Stopping Tomcat"
-cd /mindtap/tomcat/bin
+cd /opt/tomcat/bin
 ./shutdown.sh
 
 echo "==> Removing Old Application"
-cd /mindtap/tomcat/webapps
+cd /opt/tomcat/webapps
 rm -rf LandLordWebServices*
 
 echo "==> Building Application"
-cd /Users/megbers/Documents/workspaces/landlord2/LandLordWebServices\ Maven\ Webapp/
+cd /Users/frantic1337/Documents/workspace/LandLordAppRESTServer
 mvn clean install
 
 echo "==> Deploying Application"
-cp ~/Documents/workspaces/landlord2/LandLordWebServices\ Maven\ Webapp/target/LandLordWebServices.war /mindtap/tomcat/webapps/
+cp /Users/frantic1337/Documents/workspace/LandLordAppRESTServer/target/LandLordWebServices.war /opt/tomcat/webapps/
 
 echo "==> Starting Tomcat"
-cd /mindtap/tomcat/bin
+cd /opt/tomcat/bin
 ./startup.sh

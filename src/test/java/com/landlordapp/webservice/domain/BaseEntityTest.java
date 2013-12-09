@@ -111,7 +111,6 @@ public class BaseEntityTest {
 		assertEquals(entity.formatDate(date, "yyyy-MM-dd"), value);
 	}
 	
-	
 	@Test
 	public void setvShouldReturnNullIfKeyNotPresent() {
 		assertNull(entity.getDate(json, KEY));

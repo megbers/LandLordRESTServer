@@ -38,6 +38,7 @@
 				<value>com.landlordapp.webservice.domain.Property</value>
 				<value>com.landlordapp.webservice.domain.Person</value>
 				<value>com.landlordapp.webservice.domain.Expense</value>
+				<value>com.landlordapp.webservice.domain.Miles</value>
 			</list>
 		</property>
 	</bean>
@@ -61,6 +62,17 @@
 		</property> 
 	</bean>
 	
+	<bean id="MilesDAO" class="com.landlordapp.webservice.data.MilesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="milesService" class="com.landlordapp.webservice.service.impl.MilesServiceI">
+		<property name="milesDAO">
+			<ref bean="MilesDAO" />
+		</property> 
+	</bean>
 	
 	<bean id="PropertyDAO" class="com.landlordapp.webservice.data.PropertyDAO">
 		<property name="sessionFactory">

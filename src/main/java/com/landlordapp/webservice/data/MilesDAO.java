@@ -6,11 +6,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.landlordapp.webservice.domain.Expense;
+import com.landlordapp.webservice.domain.Miles;
 
-public class ExpenseDAO extends HibernateDaoSupport {
+public class MilesDAO extends HibernateDaoSupport {
 	@Transactional(propagation=Propagation.REQUIRED)
-	public Expense save(Expense transientInstance) {
+	public Miles save(Miles transientInstance) {
 		try {
 			getHibernateTemplate().saveOrUpdate(transientInstance);
 			return transientInstance;
@@ -20,9 +20,9 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public Expense findById(Long id) {
+	public Miles findById(Long id) {
 		try {
-			Expense instance = (Expense) getHibernateTemplate().get("com.landlordapp.webservice.domain.Expense", id);
+			Miles instance = (Miles) getHibernateTemplate().get("com.landlordapp.webservice.domain.Miles", id);
 			return instance;
 		} catch (RuntimeException re) {
 			throw re;
@@ -30,7 +30,7 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void delete(Expense transientInstance) {
+	public void delete(Miles transientInstance) {
 		try {
 			getHibernateTemplate().delete(transientInstance);
 		} catch (RuntimeException re) {
@@ -40,9 +40,9 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<Expense> findAll() {
+	public List<Miles> findAll() {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Expense");
+			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Miles");
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -52,7 +52,7 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public List findByProperty(Long propertyId){
 		try {
-			String queryString = "from Expense as model where model.property.id= ?";
+			String queryString = "from Miles as model where model.property.id= ?";
 			Object[] values = {propertyId};
 			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
