@@ -26,10 +26,6 @@ public class MilesServiceI implements MilesService{
 	
 	public JSONObject create(JSONObject jsonMiles) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Miles miles = new Miles(jsonMiles);
-		System.out.println(miles.getId());
-		System.out.println(miles.getDate());
-		System.out.println(miles.getMilesType());
-		System.out.println(miles.getNumberOfMiles());
 		return milesDAO.save(miles).toJSONObject();
 	}
 
