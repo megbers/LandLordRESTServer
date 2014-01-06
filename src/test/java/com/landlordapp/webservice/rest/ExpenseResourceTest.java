@@ -20,7 +20,7 @@ public class ExpenseResourceTest {
 	@Mock
 	ExpenseServiceI service;
 	@InjectMocks
-	private ExpenseResource resource = new ExpenseResource();
+	private final ExpenseResource resource = new ExpenseResource();
 	private String id;
 	private JSONObject fakeExpense;
 
@@ -39,7 +39,7 @@ public class ExpenseResourceTest {
 		JSONArray actual = resource.findAllExpenses();
 		assertEquals(expenses, actual);
 	}
-	
+
 	@Test
 	public void findByPropertyShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Long propertyId = 1L;
@@ -48,36 +48,35 @@ public class ExpenseResourceTest {
 		JSONArray actual = resource.findExpensesByProperty(propertyId);
 		assertEquals(expenses, actual);
 	}
-	
-	
+
 	@Test
 	public void findExpenseShouldReturnExpenseId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeExpense);
 		JSONObject expense = resource.findExpense(id);
 		assertEquals(expense.get("id"), id);
 	}
-	
+
 	@Test
 	public void findExpenseShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(null);
 		JSONObject expense = resource.findExpense(id);
 		assertNull(expense);
 	}
-	
+
 	@Test
 	public void createExpenseShouldReturnExpenseId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeExpense)).thenReturn(fakeExpense);
 		JSONObject expense = resource.createExpense(fakeExpense);
 		assertEquals(expense.get("id"), id);
 	}
-	
+
 	@Test
 	public void updateExpenseExpenseShouldReturnExpense() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeExpense)).thenReturn(fakeExpense);
 		JSONObject expense = resource.updateExpense(fakeExpense);
 		assertEquals(expense.get("id"), id);
 	}
-	
+
 	@Test
 	public void deleteExpenseShouldDeleteExpense() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeExpense);

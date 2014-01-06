@@ -5,6 +5,8 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.landlordapp.webservice.data.PersonDAO;
 import com.landlordapp.webservice.domain.Person;
@@ -13,38 +15,49 @@ import com.landlordapp.webservice.service.PersonService;
 public class PersonServiceI implements PersonService {
 
 	private PersonDAO personDAO;
-	
-	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+
+	public JSONObject findOne(final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Person person = personDAO.findById(Long.parseLong(id));
-		if(person == null) {
+		if (person == null) {
 			return null;
 		}
 		return person.toJSONObject();
 	}
-	
-	public JSONObject create(JSONObject jsonPerson) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Person person = new Person(jsonPerson);
-		return personDAO.save(person).toJSONObject();
-	}
-	
-	public JSONObject update(JSONObject jsonPerson) throws JSONException, IllegalArgumentException, IllegalAccessException {
+
+	public JSONObject create(final JSONObject jsonPerson) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Person person = new Person(jsonPerson);
 		return personDAO.save(person).toJSONObject();
 	}
 
-	public void delete(JSONObject jsonPerson) throws JSONException {
+	public JSONObject update(final JSONObject jsonPerson) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Person person = new Person(jsonPerson);
+		return personDAO.save(person).toJSONObject();
+	}
+
+	public void delete(final JSONObject jsonPerson) throws JSONException {
 		Person person = new Person(jsonPerson);
 		personDAO.delete(person);
 	}
-	
-	public void setPersonDAO(PersonDAO personDAO) {
+
+	public void setPersonDAO(final PersonDAO personDAO) {
 		this.personDAO = personDAO;
 	}
-	
+
 	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		List<Person> persons = this.personDAO.findAll();
 		JSONArray personJSONArray = new JSONArray();
-		for(Person person: persons) {
+		for (Person person : persons) {
+			personJSONArray.put(person.toJSONObject());
+		}
+		return personJSONArray;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public JSONArray findByProperty(final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Person> persons = this.personDAO.findByProperty(propertyId);
+		JSONArray personJSONArray = new JSONArray();
+		for (Person person : persons) {
 			personJSONArray.put(person.toJSONObject());
 		}
 		return personJSONArray;

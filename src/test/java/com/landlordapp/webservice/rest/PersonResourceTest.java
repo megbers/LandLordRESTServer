@@ -20,7 +20,7 @@ public class PersonResourceTest {
 	@Mock
 	PersonServiceI service;
 	@InjectMocks
-	private PersonResource resource = new PersonResource();
+	private final PersonResource resource = new PersonResource();
 	private String id;
 	private JSONObject fakePerson;
 
@@ -39,36 +39,44 @@ public class PersonResourceTest {
 		JSONArray actual = resource.findAllPersons();
 		assertEquals(persons, actual);
 	}
-	
-	
+
+	@Test
+	public void findByPropertyShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Long propertyId = 1L;
+		JSONArray persons = new JSONArray();
+		when(service.findByProperty(propertyId)).thenReturn(persons);
+		JSONArray actual = resource.findPersonByProperty(propertyId);
+		assertEquals(persons, actual);
+	}
+
 	@Test
 	public void findPersonShouldReturnPersonId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakePerson);
 		JSONObject person = resource.findPerson(id);
 		assertEquals(person.get("id"), id);
 	}
-	
+
 	@Test
 	public void findPersonShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(null);
 		JSONObject person = resource.findPerson(id);
 		assertNull(person);
 	}
-	
+
 	@Test
 	public void createPersonShouldReturnPersonId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakePerson)).thenReturn(fakePerson);
 		JSONObject person = resource.createPerson(fakePerson);
 		assertEquals(person.get("id"), id);
 	}
-	
+
 	@Test
 	public void updatePersonPersonShouldReturnPerson() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakePerson)).thenReturn(fakePerson);
 		JSONObject person = resource.updatePerson(fakePerson);
 		assertEquals(person.get("id"), id);
 	}
-	
+
 	@Test
 	public void deletePersonShouldDeletePerson() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakePerson);

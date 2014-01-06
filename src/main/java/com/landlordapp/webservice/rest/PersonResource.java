@@ -26,7 +26,7 @@ import com.landlordapp.webservice.service.PersonService;
 public class PersonResource {
 	@Autowired
 	private PersonService personService;
-	
+
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
@@ -34,43 +34,51 @@ public class PersonResource {
 		JSONArray response = personService.findAll();
 		return response;
 	}
-	
+
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findPerson(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject findPerson(@PathParam("id") final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = personService.findOne(id);
 		return response;
 	}
-	
+
+	@GET
+	@Path("findByProperty/{propertyId}")
+	@Produces(APPLICATION_JSON)
+	public JSONArray findPersonByProperty(@PathParam("propertyId") final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONArray response = personService.findByProperty(propertyId);
+		return response;
+	}
+
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createPerson(JSONObject person) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject createPerson(final JSONObject person) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newPerson = personService.create(person);
 		return newPerson;
 	}
-	
+
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updatePerson(JSONObject person) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject updatePerson(final JSONObject person) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newPerson = personService.update(person);
 		return newPerson;
 	}
-	
+
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deletePerson(@FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject deletePerson(@FormParam("id") final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject person = personService.findOne(id);
 		personService.delete(person);
 		JSONObject object = new JSONObject();
 		object.put("success", 1);
 		return object;
 	}
-	
-	public void setPersonService(PersonService service) {
+
+	public void setPersonService(final PersonService service) {
 		this.personService = service;
 	}
 }
