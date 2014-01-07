@@ -50,6 +50,7 @@ public class MilesServiceITest {
 		jsonMiles.put("id", idString);
 		jsonMiles.put("numberOfMiles", numberOfMiles);
 		jsonMiles.put("property", property);
+		jsonMiles.put("milesType", "BANK");
 		MockitoAnnotations.initMocks(this);
 	}
 

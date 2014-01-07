@@ -9,6 +9,8 @@ import org.codehaus.jettison.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.landlordapp.webservice.domain.type.ExpenseType;
+
 @SuppressWarnings("deprecation")
 public class ExpenseTest {
 	public static final Long ID = 100L;
@@ -30,10 +32,10 @@ public class ExpenseTest {
 	public static final String DESCRIPTION = "description";
 	public static final Long PROPERTY_ID = 300L;
 	public static final String PROPERTY_ID_ST = "{id: 300}";
-	public static final String EXPENSE_TYPE = "type";
-	
+	public static final String EXPENSE_TYPE = "RENT";
+
 	private JSONObject jsonExpense;
-	
+
 	@Before
 	public void setUp() throws JSONException {
 		jsonExpense = new JSONObject();
@@ -47,8 +49,8 @@ public class ExpenseTest {
 		jsonExpense.put(Expense.EXPENSE_TYPE, EXPENSE_TYPE);
 		jsonExpense.put(Expense.PROPERTY, new JSONObject(PROPERTY_ID_ST));
 	}
-	
-	@Test 
+
+	@Test
 	public void setterShouldAllWorkAsExpected() {
 		Expense expense = new Expense();
 		expense.setAmountPaid(AMOUNTPAID);
@@ -60,24 +62,24 @@ public class ExpenseTest {
 		expense.setPaidDate(PAIDDATE);
 		expense.setProperty(PROPERTY);
 		expense.setDescription(DESCRIPTION);
-		expense.setExpenseType(EXPENSE_TYPE);
+		expense.setExpenseType(ExpenseType.RENT);
 		Property property = new Property();
 		property.setId(PROPERTY_ID);
 		expense.setProperty(property);
-		
+
 		assertEquals(expense.getAmountPaid(), AMOUNTPAID);
 		assertEquals(expense.getAmountTotal(), AMOUNTTOTAL);
 		assertEquals(expense.getDueDate(), DUEDATE);
 		assertEquals(expense.getEnteredDate(), ENTEREDDATE);
 		assertEquals(expense.getPaid(), PAID);
 		assertEquals(expense.getPaidDate(), PAIDDATE);
-		//assertEquals(expense.getProperty(), PROPERTY);
+		// assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
 		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
-		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
+		assertEquals(expense.getExpenseType(), ExpenseType.RENT);
 	}
-	
+
 	@Test
 	public void contructorShouldPopulateFromJSONObjectWithID() throws JSONException {
 		jsonExpense.put("id", ID);
@@ -88,12 +90,12 @@ public class ExpenseTest {
 		assertEquals(expense.getEnteredDate(), ENTEREDDATE);
 		assertEquals(expense.getPaid(), PAID);
 		assertEquals(expense.getPaidDate(), PAIDDATE);
-		//assertEquals(expense.getProperty(), PROPERTY);
+		// assertEquals(expense.getProperty(), PROPERTY);
 		assertEquals(expense.getId(), ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
-		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
+		assertEquals(expense.getExpenseType(), ExpenseType.RENT);
 	}
-	
+
 	@Test
 	public void contructorShouldPopulateFromJSONObjectWithoutID() throws JSONException {
 		Expense expense = new Expense(jsonExpense);
@@ -105,15 +107,15 @@ public class ExpenseTest {
 		assertEquals(expense.getPaidDate(), PAIDDATE);
 		assertEquals(expense.getProperty().getId(), PROPERTY_ID);
 		assertEquals(expense.getDescription(), DESCRIPTION);
-		assertEquals(expense.getExpenseType(), EXPENSE_TYPE);
+		assertEquals(expense.getExpenseType(), ExpenseType.RENT);
 	}
-	
+
 	@Test
 	public void toJSONObjectShouldReturnAJSONRepresentationOfObject() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		jsonExpense.put("id", ID);
 		Expense expense = new Expense(jsonExpense);
 		JSONObject actual = expense.toJSONObject();
-		
+
 		assertEquals(actual.getString(Expense.AMOUNT_PAID), AMOUNTPAID_ST);
 		assertEquals(actual.getString(Expense.AMOUNT_TOTAL), AMOUNTTOTAL_ST);
 		assertEquals(actual.getString(Expense.DUE_DATE), DUEDATE_ST);
@@ -124,15 +126,15 @@ public class ExpenseTest {
 		assertEquals(actual.getString(Expense.DESCRIPTION), DESCRIPTION);
 		assertEquals(actual.getString(Expense.EXPENSE_TYPE), EXPENSE_TYPE);
 	}
-	
+
 	@Test
 	public void toJSONObjectShouldReturnAJSONRepresentationOfObjectWithPropertyIfPresent() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		jsonExpense.put("id", ID);
 		Expense expense = new Expense(jsonExpense);
 		expense.setProperty(new Property());
 		JSONObject actual = expense.toJSONObject();
-		
+
 		assertEquals(actual.getJSONObject(Expense.PROPERTY).toString(), "{\"tenants\":[]}");
 	}
-	
+
 }

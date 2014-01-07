@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,6 +16,8 @@ import javax.persistence.Table;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.landlordapp.webservice.domain.type.ExpenseType;
 
 @Entity
 @Table(name = "expense", catalog = "landlord")
@@ -30,7 +34,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public static final String ID = "id";
 	public static final String DESCRIPTION = "description";
 	public static final String EXPENSE_TYPE = "expenseType";
-	
+
 	public Long id;
 	public Double amountTotal;
 	public Double amountPaid;
@@ -40,11 +44,12 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public Date dueDate;
 	public Date paidDate;
 	public String description;
-	public String expenseType;
-	
-	public Expense() {}
-	
-	public Expense(JSONObject json) {
+	public ExpenseType expenseType;
+
+	public Expense() {
+	}
+
+	public Expense(final JSONObject json) {
 		this.id = getLong(json, ID);
 		this.amountTotal = getDouble(json, AMOUNT_TOTAL);
 		this.amountPaid = getDouble(json, AMOUNT_PAID);
@@ -53,19 +58,19 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.dueDate = getDate(json, DUE_DATE, "yyyy-MM-dd");
 		this.paidDate = getDate(json, PAID_DATE, "yyyy-MM-dd");
 		this.description = getString(json, DESCRIPTION);
-		this.expenseType = getString(json, EXPENSE_TYPE);
-		
-		//TODO Handle Property
-		//Should I have the front end submit the entire property, too?
+		this.expenseType = ExpenseType.valueOf(getString(json, EXPENSE_TYPE));
+
+		// TODO Handle Property
+		// Should I have the front end submit the entire property, too?
 		try {
 			this.property = new Property(json.getJSONObject(PROPERTY));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//this.property.setId(getLong(json, PROPERTY));
+		// this.property.setId(getLong(json, PROPERTY));
 	}
-	
+
 	@GenericGenerator(name = "generator", strategy = "increment")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -74,7 +79,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -83,7 +88,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		return amountTotal;
 	}
 
-	public void setAmountTotal(Double amountTotal) {
+	public void setAmountTotal(final Double amountTotal) {
 		this.amountTotal = amountTotal;
 	}
 
@@ -92,7 +97,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		return amountPaid;
 	}
 
-	public void setAmountPaid(Double amountPaid) {
+	public void setAmountPaid(final Double amountPaid) {
 		this.amountPaid = amountPaid;
 	}
 
@@ -101,7 +106,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		return paid;
 	}
 
-	public void setPaid(Boolean paid) {
+	public void setPaid(final Boolean paid) {
 		this.paid = paid;
 	}
 
@@ -109,8 +114,8 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public Date getEnteredDate() {
 		return enteredDate;
 	}
-	
-	public void setEnteredDate(Date enteredDate) {
+
+	public void setEnteredDate(final Date enteredDate) {
 		this.enteredDate = enteredDate;
 	}
 
@@ -119,44 +124,45 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(final Date dueDate) {
 		this.dueDate = dueDate;
 	}
-	
+
 	@Column(name = "paid_date")
 	public Date getPaidDate() {
 		return paidDate;
 	}
 
-	public void setPaidDate(Date paidDate) {
+	public void setPaidDate(final Date paidDate) {
 		this.paidDate = paidDate;
 	}
-	
+
 	@Column(name = "description")
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "property_id", nullable = true)
 	public Property getProperty() {
 		return property;
 	}
 
-	public void setProperty(Property property) {
+	public void setProperty(final Property property) {
 		this.property = property;
 	}
-	
+
 	@Column(name = "type")
-	public String getExpenseType() {
+	@Enumerated(EnumType.STRING)
+	public ExpenseType getExpenseType() {
 		return expenseType;
 	}
 
-	public void setExpenseType(String expenseType) {
+	public void setExpenseType(final ExpenseType expenseType) {
 		this.expenseType = expenseType;
 	}
 
@@ -172,11 +178,11 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		object.put(PAID_DATE, formatDate(paidDate, "yyyy-MM-dd"));
 		object.put(DESCRIPTION, description);
 		object.put(EXPENSE_TYPE, expenseType);
-		
-		if(property != null) {
+
+		if (property != null) {
 			object.put(PROPERTY, property.toJSONObject());
 		}
-		
+
 		return object;
 	}
 

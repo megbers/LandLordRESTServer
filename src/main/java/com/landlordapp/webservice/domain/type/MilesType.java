@@ -1,5 +1,5 @@
 package com.landlordapp.webservice.domain.type;
 
 public enum MilesType {
-	RENTAL, HARDWARE_STORE, BANK, REALATOR, OTHER;
+	RENTAL, HARDWARE_STORE, BANK, REALTOR, OTHER;
 }
