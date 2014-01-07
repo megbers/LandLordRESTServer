@@ -1,5 +1,8 @@
 package com.landlordapp.webservice.service.impl;
 
+import static com.landlordapp.webservice.domain.User.EMAIL;
+import static com.landlordapp.webservice.domain.User.PASSWORD;
+
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -48,6 +51,21 @@ public class UserServiceI implements UserService {
 			userJSONArray.put(user.toJSONObject());
 		}
 		return userJSONArray;
+	}
+	
+	public JSONObject login(JSONObject jsonUser) throws JSONException {
+		String email = jsonUser.getString(EMAIL);
+		String password = jsonUser.getString(PASSWORD);
+		User user = userDAO.findByEmail(email);
+		
+		JSONObject response = new JSONObject();
+		if(user != null && user.getPassword().equals(password)) {
+			response.put("valid", true);
+			response.put("user", user.toJSONObject());
+		} else {
+			response.put("valid", false);
+		}
+		return response;
 	}
 	
 }

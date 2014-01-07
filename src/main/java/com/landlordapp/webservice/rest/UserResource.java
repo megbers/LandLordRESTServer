@@ -59,6 +59,14 @@ public class UserResource {
 		return newUser;
 	}
 	
+	@POST
+	@Path("login")
+	@Produces(APPLICATION_JSON)
+	public JSONObject loginUser(JSONObject user) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONObject response = userService.login(user);
+		return response;
+	}
+	
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)

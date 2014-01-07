@@ -16,7 +16,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "user", catalog = "landlord")
 public class User extends BaseEntity implements Serializable {
 	public  static final long serialVersionUID = -5570961237967000666L;
-	//public  static final String[] fieldNames = {"id", "email", "password"};
+
+	public static final String EMAIL = "email";
+	public static final String PASSWORD = "password";
+	public static final String ID = "id";
 	public  Long id;
 	public  String email;
 	public  String password;
@@ -24,9 +27,9 @@ public class User extends BaseEntity implements Serializable {
 	public User() { }
 	
 	public User(JSONObject json) throws JSONException {
-		this.id = getLong(json, "id");
-		this.email = getString(json, "email");
-		this.password = getString(json, "password");
+		this.id = getLong(json, ID);
+		this.email = getString(json, EMAIL);
+		this.password = getString(json, PASSWORD);
 	}
 	
 	// Property accessors
@@ -62,9 +65,9 @@ public class User extends BaseEntity implements Serializable {
 	
 	public JSONObject toJSONObject() throws JSONException {
 		JSONObject object = new JSONObject();
-		object.put("id", id);
-		object.put("email", email);
-		object.put("password", password);
+		object.put(ID, id);
+		object.put(EMAIL, email);
+		object.put(PASSWORD, password);
 		return object;
 	}
 }

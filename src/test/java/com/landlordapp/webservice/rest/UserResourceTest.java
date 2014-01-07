@@ -23,7 +23,7 @@ public class UserResourceTest {
 	@Mock
 	UserServiceI service;
 	@InjectMocks
-	private UserResource resource = new UserResource();
+	private final UserResource resource = new UserResource();
 	private String id;
 	private JSONObject fakeUser;
 
@@ -42,36 +42,35 @@ public class UserResourceTest {
 		JSONArray actual = resource.findAllUsers();
 		assertEquals(users, actual);
 	}
-	
-	
+
 	@Test
 	public void findUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeUser);
 		JSONObject user = resource.findUser(id);
 		assertEquals(user.get("id"), id);
 	}
-	
+
 	@Test
 	public void findUserShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(null);
 		JSONObject user = resource.findUser(id);
 		assertNull(user);
 	}
-	
+
 	@Test
 	public void createUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeUser)).thenReturn(fakeUser);
 		JSONObject user = resource.createUser(fakeUser);
 		assertEquals(user.get("id"), id);
 	}
-	
+
 	@Test
 	public void updateUserUserShouldReturnUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeUser)).thenReturn(fakeUser);
 		JSONObject user = resource.updateUser(fakeUser);
 		assertEquals(user.get("id"), id);
 	}
-	
+
 	@Test
 	public void deleteUserShouldDeleteUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id)).thenReturn(fakeUser);
@@ -80,5 +79,14 @@ public class UserResourceTest {
 		assertEquals(json.get("success"), 1);
 	}
 
-	
+	@Test
+	public void loginShouldLoginUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONObject jsonUser = new JSONObject();
+		JSONObject response = new JSONObject();
+
+		when(service.login(jsonUser)).thenReturn(response);
+
+		assertEquals(response, resource.loginUser(jsonUser));
+	}
+
 }
