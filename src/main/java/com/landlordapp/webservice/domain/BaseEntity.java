@@ -62,7 +62,7 @@ public abstract class BaseEntity {
 	}
 	
 	protected String formatDate(Date date) {
-		return formatDate(date, "dd-MM-yyyy");
+		return formatDate(date, "MM-dd-yyyy");
 	}
 	
 	public abstract JSONObject toJSONObject() throws JSONException;

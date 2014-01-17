@@ -41,6 +41,7 @@
 				<value>com.landlordapp.webservice.domain.Person</value>
 				<value>com.landlordapp.webservice.domain.Expense</value>
 				<value>com.landlordapp.webservice.domain.Miles</value>
+				<value>com.landlordapp.webservice.domain.Note</value>
 			</list>
 		</property>
 	</bean>
@@ -112,6 +113,18 @@
 	<bean id="expenseService" class="com.landlordapp.webservice.service.impl.ExpenseServiceI">
 		<property name="expenseDAO">
 			<ref bean="ExpenseDAO" />
+		</property> 
+	</bean>
+	
+	<bean id="NoteDAO" class="com.landlordapp.webservice.data.NoteDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="noteService" class="com.landlordapp.webservice.service.impl.NoteServiceI">
+		<property name="noteDAO">
+			<ref bean="NoteDAO" />
 		</property> 
 	</bean>
 </beans>	

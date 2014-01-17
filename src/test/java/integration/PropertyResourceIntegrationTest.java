@@ -27,11 +27,12 @@ public class PropertyResourceIntegrationTest {
 	private PropertyResource resource;
 	private PropertyService propertyService;
 	private List<JSONObject> propertiesToDelete;
+	private ApplicationContext appContext;
 	
 	@Before
 	public void setUp() {
 		//TODO Find a more spring like way to do this.
-		ApplicationContext appContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+		appContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 		propertyService = (PropertyService) appContext.getBean("propertyService");
 		resource = new PropertyResource();
 		resource.setPropertyService(propertyService);

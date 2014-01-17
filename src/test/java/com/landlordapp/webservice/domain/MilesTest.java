@@ -11,10 +11,10 @@ import org.junit.Test;
 
 import com.landlordapp.webservice.domain.type.MilesType;
 
-@SuppressWarnings("deprecation")
 public class MilesTest {
 	private static final Long ID = 1L;
 	private static final String ID_ST = "1";
+	@SuppressWarnings("deprecation")
 	private static final Date DATE = new Date(110, 9, 10);
 	private static final String DATE_ST = "10-10-2010";
 	private static final Long PROPERTY_ID = 300L;
@@ -93,7 +93,7 @@ public class MilesTest {
 		miles.setProperty(new Property());
 		JSONObject actual = miles.toJSONObject();
 
-		assertEquals(actual.getJSONObject(Expense.PROPERTY).toString(), "{\"tenants\":[]}");
+		assertEquals(actual.getJSONObject(Miles.PROPERTY).toString(), "{\"tenants\":[]}");
 	}
 
 }
