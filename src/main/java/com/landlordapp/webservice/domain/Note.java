@@ -16,26 +16,26 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "note", catalog="landlord")
+@Table(name = "note", catalog = "landlord")
 public class Note extends BaseEntity {
-	
+
 	public static final String ID = "id";
 	public static final String NOTE_DATE = "date";
 	public static final String TEXT = "text";
 	public static final String PROPERTY = "property";
-	
+
 	public Long id;
 	public Date date;
 	public String text;
 	public Property property;
-	
+
 	public Note() {
-		
+
 	}
-	
+
 	public Note(final JSONObject json) {
 		this.id = getLong(json, ID);
-		this.date = getDate(json, NOTE_DATE);
+		this.date = getDate(json, NOTE_DATE, "yyyy-MM-dd");
 		this.text = getString(json, TEXT);
 
 		// TODO Handle Property
@@ -47,7 +47,7 @@ public class Note extends BaseEntity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public JSONObject toJSONObject() throws JSONException {
 		JSONObject object = new JSONObject();
@@ -60,7 +60,7 @@ public class Note extends BaseEntity {
 		}
 		return object;
 	}
-	
+
 	@GenericGenerator(name = "generator", strategy = "increment")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -69,7 +69,7 @@ public class Note extends BaseEntity {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -78,7 +78,7 @@ public class Note extends BaseEntity {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 
@@ -87,10 +87,10 @@ public class Note extends BaseEntity {
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "property_id", nullable = true)
 	public Property getProperty() {

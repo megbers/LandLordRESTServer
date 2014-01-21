@@ -35,26 +35,22 @@ public class NoteServiceITest {
 	private JSONObject jsonNote;
 
 	public Date date;
-	public Double numberOfNote;
 	public Property property;
-	public String noteType;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
 		property = new Property();
 		service = new NoteServiceI();
 		note = new Note();
-		numberOfNote = 123.45D;
 		jsonNote = new JSONObject();
 		jsonNote.put("id", idString);
-		jsonNote.put("numberOfNote", numberOfNote);
 		jsonNote.put("property", property);
-		jsonNote.put("noteType", "BANK");
+		jsonNote.put("text", "TEXT");
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public void findOneShouldReturnNoteWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		note.setId(id);
 		when(noteDAO.findById(id)).thenReturn(note);
 
@@ -63,7 +59,7 @@ public class NoteServiceITest {
 	}
 
 	@Test
-	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public void findOneShouldReturnNullWhenNoNoteIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(noteDAO.findById(id)).thenReturn(null);
 
 		JSONObject object = service.findOne(idString);
@@ -71,7 +67,7 @@ public class NoteServiceITest {
 	}
 
 	@Test
-	public void createUserShouldCallSaveUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public void createNoteShouldCallSaveNote() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		note.setId(id);
 
 		when(noteDAO.save(any(Note.class))).thenReturn(note);

@@ -20,12 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.landlordapp.webservice.service.MilesService;
+import com.landlordapp.webservice.service.NoteService;
 
 @Component
 @Path("miles")
 public class MilesResource {
 	@Autowired
 	private MilesService milesService;
+	@Autowired
+	private NoteService noteService;
 	
 	@GET
 	@Path("findAll")
@@ -56,6 +59,11 @@ public class MilesResource {
 	@Consumes(APPLICATION_JSON)
 	public JSONObject createMiles(JSONObject miles) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject newMiles = milesService.create(miles);
+		JSONObject newNote = new JSONObject();
+		newNote.put("text", "New Miles Created");
+		newNote.put("date", miles.get("milesDate"));
+		newNote.put("property", miles.get("property"));
+		noteService.create(newNote);
 		return newMiles;
 	}
 	
@@ -80,6 +88,10 @@ public class MilesResource {
 	
 	public void setMilesService(MilesService service) {
 		this.milesService = service;
+	}
+
+	public void setNoteService(NoteService noteService) {
+		this.noteService = noteService;
 	}
 }
 

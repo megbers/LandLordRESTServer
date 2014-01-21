@@ -40,7 +40,7 @@ public class Miles extends BaseEntity {
 
 	public Miles(final JSONObject json) {
 		this.id = getLong(json, ID);
-		this.date = getDate(json, DATE);
+		this.date = getDate(json, DATE, "yyyy-MM-dd");
 		this.numberOfMiles = getDouble(json, NUMBER_OF_MILES);
 		this.milesType = MilesType.valueOf(getString(json, MILES_TYPE));
 

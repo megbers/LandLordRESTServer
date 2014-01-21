@@ -17,6 +17,7 @@ public class MilesTest {
 	@SuppressWarnings("deprecation")
 	private static final Date DATE = new Date(110, 9, 10);
 	private static final String DATE_ST = "10-10-2010";
+	private static final String DATE_CLIENT_ST = "2010-10-10";
 	private static final Long PROPERTY_ID = 300L;
 	private static final String PROPERTY_ID_ST = "{id: 300}";
 	private static final Double NUMBER_OF_MILES = 100.001D;
@@ -28,7 +29,7 @@ public class MilesTest {
 	@Before
 	public void setUp() throws JSONException {
 		jsonMiles = new JSONObject();
-		jsonMiles.put(Miles.DATE, DATE_ST);
+		jsonMiles.put(Miles.DATE, DATE_CLIENT_ST);
 		jsonMiles.put(Miles.NUMBER_OF_MILES, NUMBER_OF_MILES_ST);
 		jsonMiles.put(Miles.PROPERTY, new JSONObject(PROPERTY_ID_ST));
 		jsonMiles.put(Miles.MILES_TYPE, MILES_TYPE_ST);
