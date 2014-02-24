@@ -23,20 +23,22 @@ public class Note extends BaseEntity {
 	public static final String NOTE_DATE = "date";
 	public static final String TEXT = "text";
 	public static final String PROPERTY = "property";
+	public static final String USER_ID = "userId";
 
 	public Long id;
 	public Date date;
 	public String text;
 	public Property property;
+	public String userId;
 
 	public Note() {
-
 	}
 
 	public Note(final JSONObject json) {
 		this.id = getLong(json, ID);
 		this.date = getDate(json, NOTE_DATE, "yyyy-MM-dd");
 		this.text = getString(json, TEXT);
+		this.userId = getString(json, USER_ID);
 
 		// TODO Handle Property
 		// Should I have the front end submit the entire property, too?
@@ -71,6 +73,15 @@ public class Note extends BaseEntity {
 
 	public void setId(final Long id) {
 		this.id = id;
+	}
+	
+	@Column(name = "user_id") 
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Column(name = "date")

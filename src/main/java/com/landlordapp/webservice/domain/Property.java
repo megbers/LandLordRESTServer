@@ -33,6 +33,7 @@ public class Property extends BaseEntity implements java.io.Serializable {
 	public static final String MORTGAGE = "mortgage";
 	public static final String ADDRESS = "address";
 	public static final String ID = "id";
+	public static final String USER_ID = "userId";
 	
 	public static final long serialVersionUID = -3997672036235921630L;
 	public Long id;
@@ -49,6 +50,7 @@ public class Property extends BaseEntity implements java.io.Serializable {
 	public Date leaseStart;
 	public Date leaseEnd;
 	public String imageLocation;
+	public String userId;
 	
 	public Property(){} 
 	
@@ -65,6 +67,8 @@ public class Property extends BaseEntity implements java.io.Serializable {
 		this.leaseEnd = getDate(json, LEASE_END);
 		this.imageLocation = getString(json, IMAGE_LOCATION);
 		this.currentRent = getDouble(json, CURRENT_RENT);
+		this.userId = getString(json, USER_ID);
+
 		//TODO Handle the tenants
 		//this. = get(json, "");
 		//private List<Person> tenants;
@@ -81,6 +85,15 @@ public class Property extends BaseEntity implements java.io.Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Column(name = "user_id") 
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	@Column(name = ADDRESS, length = 50)

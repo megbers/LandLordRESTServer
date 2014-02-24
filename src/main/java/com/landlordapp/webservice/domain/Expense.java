@@ -34,6 +34,7 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public static final String ID = "id";
 	public static final String DESCRIPTION = "description";
 	public static final String EXPENSE_TYPE = "expenseType";
+	public static final String USER_ID = "userId";
 
 	public Long id;
 	public Double amountTotal;
@@ -45,7 +46,8 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 	public Date paidDate;
 	public String description;
 	public ExpenseType expenseType;
-
+	public String userId;
+	
 	public Expense() {
 	}
 
@@ -59,7 +61,8 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 		this.paidDate = getDate(json, PAID_DATE, "yyyy-MM-dd");
 		this.description = getString(json, DESCRIPTION);
 		this.expenseType = ExpenseType.valueOf(getString(json, EXPENSE_TYPE));
-
+		this.userId = getString(json, USER_ID);
+		
 		// TODO Handle Property
 		// Should I have the front end submit the entire property, too?
 		try {
@@ -90,6 +93,15 @@ public class Expense extends BaseEntity implements java.io.Serializable {
 
 	public void setAmountTotal(final Double amountTotal) {
 		this.amountTotal = amountTotal;
+	}
+	
+	@Column(name = "user_id") 
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Column(name = "amount_paid")

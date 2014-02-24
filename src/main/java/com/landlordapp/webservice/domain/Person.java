@@ -30,13 +30,15 @@ public class Person extends BaseEntity implements Serializable {
 	public static final String PHONE = "phone";
 	public static final String EMAIL = "email";
 	public static final String TYPE = "type";
-
+	public static final String USER_ID = "userId";
+	
 	public Long id;
 	public String name;
 	public String phone;
 	public String email;
 	public Property property;
 	public PersonType type;
+	public String userId;
 
 	public Person() {
 
@@ -48,6 +50,7 @@ public class Person extends BaseEntity implements Serializable {
 		this.phone = getString(json, "phone");
 		this.email = getString(json, "email");
 		this.type = PersonType.valueOf(json.getString("type"));
+		this.userId = getString(json, USER_ID);
 
 		// TODO Handle Property
 		// Should I have the front end submit the entire property, too?
@@ -70,6 +73,15 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setId(final Long id) {
 		this.id = id;
+	}
+	
+	@Column(name = "user_id") 
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Column(name = "name", length = 50)

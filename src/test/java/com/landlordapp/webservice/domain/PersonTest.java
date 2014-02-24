@@ -6,6 +6,7 @@ import static com.landlordapp.webservice.domain.Person.NAME;
 import static com.landlordapp.webservice.domain.Person.PHONE;
 import static com.landlordapp.webservice.domain.Person.PROPERTY;
 import static com.landlordapp.webservice.domain.Person.TYPE;
+import static com.landlordapp.webservice.domain.Person.USER_ID;
 import static com.landlordapp.webservice.domain.type.PersonType.TENANT;
 import static java.lang.Long.parseLong;
 import static junit.framework.Assert.assertEquals;
@@ -22,6 +23,7 @@ public class PersonTest {
 	String email = "email address";
 	String phone = "phone";
 	String name = "name";
+	String userId = "userId";
 
 	@Test
 	public void contructorShouldPopulateFromJSONObjectWithID() throws JSONException {
@@ -31,6 +33,7 @@ public class PersonTest {
 		object.put(PHONE, phone);
 		object.put(NAME, name);
 		object.put(TYPE, TENANT.toString());
+		object.put(USER_ID, userId);
 
 		Person person = new Person(object);
 		assertEquals(person.getId(), longId);
@@ -38,6 +41,7 @@ public class PersonTest {
 		assertEquals(person.getPhone(), phone);
 		assertEquals(person.getName(), name);
 		assertEquals(person.getType(), PersonType.TENANT);
+		assertEquals(person.getUserId(), userId);
 	}
 
 	@Test
@@ -47,12 +51,14 @@ public class PersonTest {
 		object.put(PHONE, phone);
 		object.put(NAME, name);
 		object.put(TYPE, TENANT.toString());
+		object.put(USER_ID, userId);
 
 		Person person = new Person(object);
 		assertEquals(person.getEmail(), email);
 		assertEquals(person.getPhone(), phone);
 		assertEquals(person.getName(), name);
 		assertEquals(person.getType(), PersonType.TENANT);
+		assertEquals(person.getUserId(), userId);
 	}
 
 	@Test
@@ -66,6 +72,7 @@ public class PersonTest {
 		object.put(NAME, name);
 		object.put(TYPE, TENANT.toString());
 		object.put(PROPERTY, property);
+		object.put(USER_ID, userId);
 
 		Person person = new Person(object);
 		assertEquals(person.getProperty().getId(), new Long(1));

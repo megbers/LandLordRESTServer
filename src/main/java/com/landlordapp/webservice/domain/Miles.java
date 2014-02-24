@@ -28,12 +28,14 @@ public class Miles extends BaseEntity {
 	public static final String DATE = "milesDate";
 	public static final String NUMBER_OF_MILES = "numberOfMiles";
 	public static final String MILES_TYPE = "milesType";
+	public static final String USER_ID = "userId";
 
 	public Long id;
 	public Date date;
 	public Double numberOfMiles;
 	public Property property;
 	public MilesType milesType;
+	public String userId;
 
 	public Miles() {
 	}
@@ -43,6 +45,7 @@ public class Miles extends BaseEntity {
 		this.date = getDate(json, DATE, "yyyy-MM-dd");
 		this.numberOfMiles = getDouble(json, NUMBER_OF_MILES);
 		this.milesType = MilesType.valueOf(getString(json, MILES_TYPE));
+		this.userId = getString(json, USER_ID);
 
 		// TODO Handle Property
 		// Should I have the front end submit the entire property, too?
@@ -78,6 +81,15 @@ public class Miles extends BaseEntity {
 
 	public void setId(final Long id) {
 		this.id = id;
+	}
+	
+	@Column(name = "user_id") 
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Column(name = "date")

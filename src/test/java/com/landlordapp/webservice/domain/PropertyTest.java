@@ -32,6 +32,7 @@ public class PropertyTest {
 	private static final String ADDRESS = "address";
 	private static final String ESCROW_ST = "true";
 	private static final Boolean ESCROW = new Boolean("true");
+	private static final String USER_ID = "userId";
 	private String id = "1001";
 	private Long longId = new Long(parseLong(id));
 	
@@ -53,6 +54,7 @@ public class PropertyTest {
 		jsonProperty.put(Property.LEASE_END, LEASE_END_ST);
 		jsonProperty.put(Property.IMAGE_LOCATION, IMAGE_LOCATION);
 		jsonProperty.put(Property.CURRENT_RENT, RENT_ST);
+		jsonProperty.put(Property.USER_ID, USER_ID);
 	}
 	
 	@Test 
@@ -71,6 +73,7 @@ public class PropertyTest {
 		property.setRentPermit(PERMIT);
 		property.setEscrow(ESCROW);
 		property.setCurrentRent(RENT);
+		property.setUserId(USER_ID);
 		
 		
 		assertEquals(property.getId(), longId);
@@ -85,6 +88,7 @@ public class PropertyTest {
 		assertEquals(property.getRentPermit(), PERMIT);
 		assertEquals(property.getEscrow(), ESCROW);
 		assertEquals(property.getCurrentRent(), RENT);
+		assertEquals(property.getUserId(), USER_ID);
 	}
 	
 	@Test
@@ -104,6 +108,7 @@ public class PropertyTest {
 		assertEquals(property.getRentPermit(), PERMIT);
 		assertEquals(property.getEscrow(), ESCROW);
 		assertEquals(property.getCurrentRent(), RENT);
+		assertEquals(property.getUserId(), USER_ID);
 	}
 	
 	@Test
@@ -121,6 +126,7 @@ public class PropertyTest {
 		assertEquals(property.getRentPermit(), PERMIT);
 		assertEquals(property.getEscrow(), ESCROW);
 		assertEquals(property.getCurrentRent(), RENT);
+		assertEquals(property.getUserId(), USER_ID);
 	}
 	
 	@Test

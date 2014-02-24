@@ -23,6 +23,7 @@ public class MilesTest {
 	private static final Double NUMBER_OF_MILES = 100.001D;
 	private static final String NUMBER_OF_MILES_ST = "100.001";
 	private static final String MILES_TYPE_ST = "BANK";
+	private static final String USER_ID = "userId";
 
 	private JSONObject jsonMiles;
 
@@ -33,6 +34,7 @@ public class MilesTest {
 		jsonMiles.put(Miles.NUMBER_OF_MILES, NUMBER_OF_MILES_ST);
 		jsonMiles.put(Miles.PROPERTY, new JSONObject(PROPERTY_ID_ST));
 		jsonMiles.put(Miles.MILES_TYPE, MILES_TYPE_ST);
+		jsonMiles.put(Miles.USER_ID, USER_ID);
 	}
 
 	@Test
@@ -45,12 +47,14 @@ public class MilesTest {
 		Property property = new Property();
 		property.setId(PROPERTY_ID);
 		miles.setProperty(property);
+		miles.setUserId(USER_ID);
 
 		assertEquals(miles.getId(), ID);
 		assertEquals(miles.getDate(), DATE);
 		assertEquals(miles.getProperty(), property);
 		assertEquals(miles.getNumberOfMiles(), NUMBER_OF_MILES);
 		assertEquals(miles.getMilesType(), MilesType.BANK);
+		assertEquals(miles.getUserId(), USER_ID);
 	}
 
 	@Test
@@ -63,6 +67,7 @@ public class MilesTest {
 		assertEquals(miles.getNumberOfMiles(), NUMBER_OF_MILES);
 		assertEquals(miles.getProperty().getId(), PROPERTY_ID);
 		assertEquals(miles.getMilesType(), MilesType.BANK);
+		assertEquals(miles.getUserId(), USER_ID);
 	}
 
 	@Test
@@ -73,6 +78,7 @@ public class MilesTest {
 		assertEquals(miles.getNumberOfMiles(), NUMBER_OF_MILES);
 		assertEquals(miles.getProperty().getId(), PROPERTY_ID);
 		assertEquals(miles.getMilesType(), MilesType.BANK);
+		assertEquals(miles.getUserId(), USER_ID);
 	}
 
 	@Test

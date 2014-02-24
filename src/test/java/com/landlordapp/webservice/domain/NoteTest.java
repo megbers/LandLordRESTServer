@@ -19,6 +19,7 @@ public class NoteTest {
 	private static final Long PROPERTY_ID = 300L;
 	private static final String PROPERTY_ID_ST = "{id: 300}";
 	private static final String TEXT_ST = "Text";
+	private static final String USER_ID = "userId";
 
 	private JSONObject jsonNote;
 
@@ -28,6 +29,7 @@ public class NoteTest {
 		jsonNote.put(Note.NOTE_DATE, DATE_CLIENT_ST);
 		jsonNote.put(Note.TEXT, TEXT_ST);
 		jsonNote.put(Note.PROPERTY, new JSONObject(PROPERTY_ID_ST));
+		jsonNote.put(Note.USER_ID, USER_ID);
 	}
 
 	@Test
@@ -36,6 +38,7 @@ public class NoteTest {
 		note.setId(ID);
 		note.setDate(DATE);
 		note.setText(TEXT_ST);
+		note.setUserId(USER_ID);
 		Property property = new Property();
 		property.setId(PROPERTY_ID);
 		note.setProperty(property);
@@ -44,6 +47,7 @@ public class NoteTest {
 		assertEquals(note.getDate(), DATE);
 		assertEquals(note.getText(), TEXT_ST);
 		assertEquals(note.getProperty(), property);
+		assertEquals(note.getUserId(), USER_ID);
 	}
 
 	@Test
@@ -55,6 +59,7 @@ public class NoteTest {
 		assertEquals(note.getDate(), DATE);
 		assertEquals(note.getText(), TEXT_ST);
 		assertEquals(note.getProperty().getId(), PROPERTY_ID);
+		assertEquals(note.getUserId(), USER_ID);
 	}
 
 	@Test
@@ -64,6 +69,7 @@ public class NoteTest {
 		assertEquals(note.getDate(), DATE);
 		assertEquals(note.getText(), TEXT_ST);
 		assertEquals(note.getProperty().getId(), PROPERTY_ID);
+		assertEquals(note.getUserId(), USER_ID);
 	}
 
 	@Test
