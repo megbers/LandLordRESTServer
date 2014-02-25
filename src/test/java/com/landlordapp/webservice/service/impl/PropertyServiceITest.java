@@ -32,6 +32,7 @@ public class PropertyServiceITest {
 	private PropertyServiceI service;
 	private String idString = "1001";
 	private String mortgageString = "1234.56";
+	private String userId = "userId";
 	private Long id = 1001L;
 	private Property property;
 	private JSONObject jsonProperty;
@@ -44,23 +45,24 @@ public class PropertyServiceITest {
 		jsonProperty.put("id", idString);
 		jsonProperty.put("address", "address");
 		jsonProperty.put("mortgage", mortgageString);
+		jsonProperty.put("userId", userId);
 		MockitoAnnotations.initMocks(this);
 	}
 	
 	@Test
 	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.setId(id);
-		when(propertyDAO.findById(id)).thenReturn(property);
+		when(propertyDAO.findById(id, userId)).thenReturn(property);
 		
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertEquals(object.get("id"), id);
 	}
 	
 	@Test
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(propertyDAO.findById(id)).thenReturn(null);
+		when(propertyDAO.findById(id, userId)).thenReturn(null);
 		
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertNull(object);
 	}
 	
@@ -99,8 +101,8 @@ public class PropertyServiceITest {
 		property.setId(1L);
 		list.add(property);
 		
-		when(propertyDAO.findAll()).thenReturn(list);
-		JSONArray actual = service.findAll();
+		when(propertyDAO.findAll(userId)).thenReturn(list);
+		JSONArray actual = service.findAll(userId);
 		
 		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
 		assertEquals("address", actual.getJSONObject(0).get("address"));

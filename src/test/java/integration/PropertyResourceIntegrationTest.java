@@ -24,6 +24,7 @@ import com.landlordapp.webservice.service.PropertyService;
 public class PropertyResourceIntegrationTest {
 	private static final String ADDRESS = "33660 Test Ln.";
 	private static final String ADDRESS_UPDATED = "1234 Updated Test Ln.";
+	private static final String USER_ID = "userId";
 	private PropertyResource resource;
 	private PropertyService propertyService;
 	private List<JSONObject> propertiesToDelete;
@@ -49,12 +50,12 @@ public class PropertyResourceIntegrationTest {
 	
 	@Test
 	public void createShouldCreateAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONObject property = resource.createProperty(createPropertyForTest(ADDRESS));
+		JSONObject property = resource.createProperty(USER_ID, createPropertyForTest(ADDRESS));
 		
 		assertNotNull(property.getLong("id"));
 		assertEquals(property.getString("address"), ADDRESS);
 		
-		JSONObject propertyFromDatabase = propertyService.findOne(property.getString("id"));
+		JSONObject propertyFromDatabase = propertyService.findOne(USER_ID, property.getString("id"));
 		assertNotNull(propertyFromDatabase);
 		assertEquals(propertyFromDatabase.getString("address"), ADDRESS);
 		
@@ -66,10 +67,10 @@ public class PropertyResourceIntegrationTest {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
 		
 		property.put("address", ADDRESS_UPDATED);
-		property = resource.updateProperty(property);
+		property = resource.updateProperty(USER_ID, property);
 		assertEquals(property.getString("address"), ADDRESS_UPDATED);
 		
-		JSONObject propertyFromDatabase = propertyService.findOne(property.getString("id"));
+		JSONObject propertyFromDatabase = propertyService.findOne(USER_ID, property.getString("id"));
 		assertNotNull(propertyFromDatabase);
 		assertEquals(propertyFromDatabase.getString("address"), ADDRESS_UPDATED);
 		
@@ -80,7 +81,7 @@ public class PropertyResourceIntegrationTest {
 	public void findOneShouldReturnAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
 		
-		JSONObject propertyFromDatabase = resource.findProperty(property.getString("id"));
+		JSONObject propertyFromDatabase = resource.findProperty(USER_ID, property.getString("id"));
 		assertEquals(propertyFromDatabase.get("address"), ADDRESS);
 		
 		propertiesToDelete.add(property);
@@ -88,7 +89,7 @@ public class PropertyResourceIntegrationTest {
 	
 	@Test
 	public void findOneShouldReturnNullWhenNoPropertyFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		assertNull(resource.findProperty("1001"));
+		assertNull(resource.findProperty(USER_ID, "1001"));
 	}
 	
 	@Test
@@ -96,7 +97,7 @@ public class PropertyResourceIntegrationTest {
 		JSONObject property1 = propertyService.create(createPropertyForTest(ADDRESS));
 		JSONObject property2 = propertyService.create(createPropertyForTest(ADDRESS_UPDATED));
 		
-		JSONArray propertiesFromDatabase = resource.findAllProperties();
+		JSONArray propertiesFromDatabase = resource.findAllProperties(USER_ID);
 		
 		assertEquals(propertiesFromDatabase.length(), 2);
 		assertEquals(propertiesFromDatabase.getJSONObject(0).getString("address"), ADDRESS);
@@ -109,16 +110,17 @@ public class PropertyResourceIntegrationTest {
 	@Test
 	public void deleteShouldRemoveAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
-		JSONObject deleteResponse = resource.deleteProperty(property.getString("id"));
+		JSONObject deleteResponse = resource.deleteProperty(USER_ID, property.getString("id"));
 		
 		assertEquals(deleteResponse.getInt("success"), 1);
-		assertNull(resource.findProperty(property.getString("id")));
+		assertNull(resource.findProperty(USER_ID, property.getString("id")));
 	}
 	
 	
 	private JSONObject createPropertyForTest(String address) throws JSONException {
 		JSONObject newProperty = new JSONObject();
 		newProperty.put("address", address);
+		newProperty.put("uesrId", USER_ID);
 		return newProperty;
 	}
 }

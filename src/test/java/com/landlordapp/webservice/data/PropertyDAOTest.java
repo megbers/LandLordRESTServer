@@ -25,6 +25,7 @@ public class PropertyDAOTest {
 	private PropertyDAO dao = new PropertyDAO();
 	private Property property;
 	private Long id = 1001L;
+	private String userId = "userId";
 	
 	@Before
 	public void doBeforeEachTestCase() {
@@ -48,14 +49,14 @@ public class PropertyDAOTest {
 	@Test
 	public void findByIdShouldFindAUser() {
 		when(template.get("com.landlordapp.webservice.domain.Property", id)).thenReturn(property);
-		Property actual = dao.findById(id);
+		Property actual = dao.findById(id, userId);
 		assertEquals(property, actual);
 	}
 	
 	@Test(expected = RuntimeException.class) 
 	public void findByIdShouldThrowExcpetionIfRaised() {
 		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Property", id);
-		dao.findById(id);
+		dao.findById(id, userId);
 	}
 	
 	@Test 
@@ -69,20 +70,22 @@ public class PropertyDAOTest {
 		doThrow(new RuntimeException()).when(template).delete(property);
 		dao.delete(property);
 	}
-	
 
 	@Test 
 	public void findAllShouldFindPropertys() {
 		List<Property> list = new ArrayList<Property>();
-		when(template.find("from com.landlordapp.webservice.domain.Property")).thenReturn(list);
-		List<Property> actual = dao.findAll();
-		verify(template).find("from com.landlordapp.webservice.domain.Property");
+		Object[] values = { userId };
+		when(template.find("from com.landlordapp.webservice.domain.Property as model where model.userId = ?", values)).thenReturn(list);
+		List<Property> actual = dao.findAll(userId);
+		verify(template).find("from com.landlordapp.webservice.domain.Property as model where model.userId = ?", values);
 		assertEquals(actual, list);
 	}
 	
 	@Test(expected = RuntimeException.class) 
 	public void findAllShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Property");
-		dao.findAll();
+		Object[] values = { userId };
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Property as model where model.userId = ?", values);
+		dao.findAll(userId);
 	}
+	
 }

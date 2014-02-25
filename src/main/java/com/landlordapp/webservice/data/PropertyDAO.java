@@ -20,7 +20,7 @@ public class PropertyDAO extends HibernateDaoSupport {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public Property findById(final Long id) {
+	public Property findById(final Long id, final String userId) {
 		try {
 			Property instance = (Property) getHibernateTemplate().get("com.landlordapp.webservice.domain.Property", id);
 			return instance;
@@ -37,12 +37,14 @@ public class PropertyDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<Property> findAll() {
+	public List<Property> findAll(String userId) {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Property");
+			String queryString = "from com.landlordapp.webservice.domain.Property as model where model.userId = ?";
+			Object[] values = {userId};
+			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;
 		}

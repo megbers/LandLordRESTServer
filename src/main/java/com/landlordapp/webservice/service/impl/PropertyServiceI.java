@@ -22,8 +22,8 @@ public class PropertyServiceI implements PropertyService {
 	private PersonDAO personDAO;
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Property property = propertyDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Property property = propertyDAO.findById(Long.parseLong(id), userId);
 		if(property == null) {
 			return null;
 		}
@@ -66,8 +66,8 @@ public class PropertyServiceI implements PropertyService {
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Property> propertys = this.propertyDAO.findAll();
+	public JSONArray findAll(String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Property> propertys = this.propertyDAO.findAll(userId);
 		JSONArray propertyJSONArray = new JSONArray();
 		for(Property property: propertys) {
 			propertyJSONArray.put(property.toJSONObject());

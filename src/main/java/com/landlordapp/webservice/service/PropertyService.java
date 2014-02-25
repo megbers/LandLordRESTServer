@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface PropertyService {
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException;
+	public JSONObject findOne(String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
 	
 	public JSONObject create(JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException;
 	
@@ -17,5 +17,5 @@ public interface PropertyService {
 	public void delete(JSONObject jsonProperty) throws JSONException, IllegalArgumentException, IllegalAccessException;
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException;
+	public JSONArray findAll(String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
 }

@@ -25,57 +25,60 @@ public class PropertyResourceTest {
 	@InjectMocks
 	private PropertyResource resource = new PropertyResource();
 	private String id;
+	private String userId;
 	private JSONObject fakeProperty;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
 		id = "property id";
+		userId = "userId";
 		fakeProperty = new JSONObject();
 		fakeProperty.put("id", id);
+		fakeProperty.put("userId", userId);
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findAllShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray users = new JSONArray();
-		when(service.findAll()).thenReturn(users);
-		JSONArray actual = resource.findAllProperties();
+		when(service.findAll(userId)).thenReturn(users);
+		JSONArray actual = resource.findAllProperties(userId);
 		assertEquals(users, actual);
 	}
 	
 	
 	@Test
-	public void findUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(fakeProperty);
-		JSONObject user = resource.findProperty(id);
-		assertEquals(user.get("id"), id);
+	public void findOneShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		when(service.findOne(id, userId)).thenReturn(fakeProperty);
+		JSONObject property = resource.findProperty(userId, id);
+		assertEquals(property.get("id"), id);
 	}
 	
 	@Test
-	public void findUserShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(null);
-		JSONObject user = resource.findProperty(id);
-		assertNull(user);
+	public void findOneShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
+		when(service.findOne(id, userId)).thenReturn(null);
+		JSONObject property = resource.findProperty(userId, id);
+		assertNull(property);
 	}
 	
 	@Test
 	public void createUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeProperty)).thenReturn(fakeProperty);
-		JSONObject user = resource.createProperty(fakeProperty);
+		JSONObject user = resource.createProperty(userId, fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void updateUserUserShouldReturnUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeProperty)).thenReturn(fakeProperty);
-		JSONObject user = resource.updateProperty(fakeProperty);
+		JSONObject user = resource.updateProperty(userId, fakeProperty);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void deleteUserShouldDeleteUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(fakeProperty);
-		JSONObject json = resource.deleteProperty(id);
+		when(service.findOne(id, userId)).thenReturn(fakeProperty);
+		JSONObject json = resource.deleteProperty(userId, id);
 		verify(service).delete(fakeProperty);
 		assertEquals(json.get("success"), 1);
 	}
