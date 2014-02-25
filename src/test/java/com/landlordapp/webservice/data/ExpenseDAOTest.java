@@ -25,6 +25,7 @@ public class ExpenseDAOTest {
 	private final ExpenseDAO dao = new ExpenseDAO();
 	private Expense Expense;
 	private final Long id = 1001L;
+	private final String userId = "userId";
 
 	@Before
 	public void doBeforeEachTestCase() {
@@ -48,14 +49,14 @@ public class ExpenseDAOTest {
 	@Test
 	public void findByIdShouldFindAUser() {
 		when(template.get("com.landlordapp.webservice.domain.Expense", id)).thenReturn(Expense);
-		Expense actual = dao.findById(id);
+		Expense actual = dao.findById(id, userId);
 		assertEquals(Expense, actual);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void findByIdShouldThrowExcpetionIfRaised() {
 		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Expense", id);
-		dao.findById(id);
+		dao.findById(id, userId);
 	}
 
 	@Test
@@ -73,16 +74,18 @@ public class ExpenseDAOTest {
 	@Test
 	public void findAllShouldFindExpenses() {
 		List<Expense> list = new ArrayList<Expense>();
-		when(template.find("from com.landlordapp.webservice.domain.Expense")).thenReturn(list);
-		List<Expense> actual = dao.findAll();
-		verify(template).find("from com.landlordapp.webservice.domain.Expense");
+		Object[] values = {userId};
+		when(template.find("from Expense as model where model.userId = ?", values)).thenReturn(list);
+		List<Expense> actual = dao.findAll(userId);
+		verify(template).find("from Expense as model where model.userId = ?", values);
 		assertEquals(actual, list);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void findAllShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Expense");
-		dao.findAll();
+		Object[] values = {userId};
+		doThrow(new RuntimeException()).when(template).find("from Expense as model where model.userId = ?", values);
+		dao.findAll(userId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,10 +93,10 @@ public class ExpenseDAOTest {
 	public void findByPropertyShouldReturnListOfExpenses() {
 		Long propertyId = 1L;
 		List<Expense> list = new ArrayList<Expense>();
-		Object[] values = { propertyId };
-		when(template.find("from Expense as model where model.property.id= ?", values)).thenReturn(list);
-		List<Expense> actual = dao.findByProperty(propertyId);
-		verify(template).find("from Expense as model where model.property.id= ?", values);
+		Object[] values = {propertyId, userId};
+		when(template.find("from Expense as model where model.property.id = ? and model.userId = ?", values)).thenReturn(list);
+		List<Expense> actual = dao.findByProperty(propertyId, userId);
+		verify(template).find("from Expense as model where model.property.id = ? and model.userId = ?", values);
 		assertEquals(actual, list);
 	}
 
@@ -101,8 +104,8 @@ public class ExpenseDAOTest {
 	public void findByPropertyShouldThrowExceptionIfRaised() {
 		Long propertyId = 1L;
 		new ArrayList<Expense>();
-		Object[] values = { propertyId };
-		doThrow(new RuntimeException()).when(template).find("from Expense as model where model.property.id= ?", values);
-		dao.findByProperty(propertyId);
+		Object[] values = {propertyId, userId};
+		doThrow(new RuntimeException()).when(template).find("from Expense as model where model.property.id = ? and model.userId = ?", values);
+		dao.findByProperty(propertyId, userId);
 	}
 }

@@ -17,8 +17,8 @@ public class ExpenseServiceI implements ExpenseService {
 	private ExpenseDAO expenseDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject findOne(final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Expense expense = expenseDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(final String id, final String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Expense expense = expenseDAO.findById(Long.parseLong(id), userId);
 		if (expense == null) {
 			return null;
 		}
@@ -45,8 +45,8 @@ public class ExpenseServiceI implements ExpenseService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Expense> expenses = this.expenseDAO.findAll();
+	public JSONArray findAll(final String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Expense> expenses = this.expenseDAO.findAll(userId);
 		JSONArray expenseJSONArray = new JSONArray();
 		for (Expense expense : expenses) {
 			expenseJSONArray.put(expense.toJSONObject());
@@ -56,8 +56,8 @@ public class ExpenseServiceI implements ExpenseService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findByProperty(final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Expense> expenses = this.expenseDAO.findByProperty(propertyId);
+	public JSONArray findByProperty(final Long propertyId, final String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Expense> expenses = this.expenseDAO.findByProperty(propertyId, userId);
 		JSONArray expenseJSONArray = new JSONArray();
 		for (Expense expense : expenses) {
 			expenseJSONArray.put(expense.toJSONObject());

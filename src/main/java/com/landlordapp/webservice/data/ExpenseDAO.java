@@ -20,7 +20,7 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public Expense findById(Long id) {
+	public Expense findById(Long id, String userId) {
 		try {
 			Expense instance = (Expense) getHibernateTemplate().get("com.landlordapp.webservice.domain.Expense", id);
 			return instance;
@@ -40,9 +40,11 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<Expense> findAll() {
+	public List<Expense> findAll(String userId) {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Expense");
+			String queryString = "from Expense as model where model.userId = ?";
+			Object[] values = {userId};
+			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -50,10 +52,10 @@ public class ExpenseDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public List findByProperty(Long propertyId){
+	public List findByProperty(Long propertyId, String userId){
 		try {
-			String queryString = "from Expense as model where model.property.id= ?";
-			Object[] values = {propertyId};
+			String queryString = "from Expense as model where model.property.id = ? and model.userId = ?";
+			Object[] values = {propertyId, userId};
 			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;

@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.rest;
 
+import static com.landlordapp.webservice.domain.Property.USER_ID;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -7,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -30,31 +32,32 @@ public class ExpenseResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllExpenses() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONArray response = expenseService.findAll();
+	public JSONArray findAllExpenses(@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONArray response = expenseService.findAll(userId);
 		return response;
 	}
 	
 	@GET
 	@Path("findByProperty/{propertyId}")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findExpensesByProperty(@PathParam("propertyId") Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONArray response = expenseService.findByProperty(propertyId);
+	public JSONArray findExpensesByProperty(@HeaderParam("uesrId") String userId, @PathParam("propertyId") Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONArray response = expenseService.findByProperty(propertyId, userId);
 		return response;
 	}
 	
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findExpense(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONObject response = expenseService.findOne(id);
+	public JSONObject findExpense(@HeaderParam("uesrId") String userId, @PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONObject response = expenseService.findOne(id, userId);
 		return response;
 	}
 	
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createExpense(JSONObject expense) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject createExpense(@HeaderParam("uesrId") String userId, JSONObject expense) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		expense.put(USER_ID, userId);
 		JSONObject newExpense = expenseService.create(expense);
 		return newExpense;
 	}
@@ -62,7 +65,8 @@ public class ExpenseResource {
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updateExpense(JSONObject expense) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject updateExpense(@HeaderParam("uesrId") String userId, JSONObject expense) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		expense.put(USER_ID, userId);
 		JSONObject newExpense = expenseService.update(expense);
 		return newExpense;
 	}
@@ -70,8 +74,8 @@ public class ExpenseResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteExpense(@FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONObject expense = expenseService.findOne(id);
+	public JSONObject deleteExpense(@HeaderParam("uesrId") String userId, @FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		JSONObject expense = expenseService.findOne(id, userId);
 		expenseService.delete(expense);
 		JSONObject object = new JSONObject();
 		object.put("success", 1);

@@ -29,6 +29,7 @@ public class ExpenseServiceITest {
 	private final String idString = "1001";
 	private final String amountPaid = "1234.56";
 	private final String amountTotal = "7890.0";
+	private final String userId = "This is the user id";
 	private final Long id = 1001L;
 	private Expense expense;
 	private JSONObject jsonExpense;
@@ -42,23 +43,25 @@ public class ExpenseServiceITest {
 		jsonExpense.put(Expense.AMOUNT_TOTAL, amountTotal);
 		jsonExpense.put(Expense.AMOUNT_PAID, amountPaid);
 		jsonExpense.put(Expense.EXPENSE_TYPE, "RENT");
+		jsonExpense.put(Expense.USER_ID, userId);
+		
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		expense.setId(id);
-		when(expenseDAO.findById(id)).thenReturn(expense);
+		when(expenseDAO.findById(id, userId)).thenReturn(expense);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertEquals(object.get(Expense.ID), id);
 	}
 
 	@Test
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(expenseDAO.findById(id)).thenReturn(null);
+		when(expenseDAO.findById(id, userId)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertNull(object);
 	}
 
@@ -81,8 +84,8 @@ public class ExpenseServiceITest {
 		expense.setId(1L);
 		list.add(expense);
 
-		when(expenseDAO.findAll()).thenReturn(list);
-		JSONArray actual = service.findAll();
+		when(expenseDAO.findAll(userId)).thenReturn(list);
+		JSONArray actual = service.findAll(userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get(Expense.ID));
 		assertEquals(amountTotal, actual.getJSONObject(0).getString(Expense.AMOUNT_TOTAL));
@@ -99,8 +102,8 @@ public class ExpenseServiceITest {
 		expense.setId(1L);
 		list.add(expense);
 
-		when(expenseDAO.findByProperty(propertyId)).thenReturn(list);
-		JSONArray actual = service.findByProperty(propertyId);
+		when(expenseDAO.findByProperty(propertyId, userId)).thenReturn(list);
+		JSONArray actual = service.findByProperty(propertyId, userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get(Expense.ID));
 		assertEquals(amountTotal, actual.getJSONObject(0).getString(Expense.AMOUNT_TOTAL));
