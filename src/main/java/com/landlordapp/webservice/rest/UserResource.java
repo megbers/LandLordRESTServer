@@ -38,7 +38,7 @@ public class UserResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findUser(@PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject findUser(@PathParam("id") Long id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = userService.findOne(id);
 		return response;
 	}
@@ -70,7 +70,7 @@ public class UserResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteUser(@FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject deleteUser(@FormParam("id") Long id) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject user = userService.findOne(id);
 		userService.delete(user);
 		JSONObject object = new JSONObject();

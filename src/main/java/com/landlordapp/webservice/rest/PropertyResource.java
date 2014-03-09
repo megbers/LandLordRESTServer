@@ -32,7 +32,7 @@ public class PropertyResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllProperties(@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONArray findAllProperties(@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = propertyService.findAll(userId);
 		return response;
 	}
@@ -40,7 +40,8 @@ public class PropertyResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findProperty(@HeaderParam("uesrId") String userId, @PathParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject findProperty(@PathParam("id") Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = propertyService.findOne(id, userId);
 		return response;
 	}
@@ -48,7 +49,8 @@ public class PropertyResource {
 	@PUT
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject createProperty(@HeaderParam("uesrId") String userId, JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject createProperty(JSONObject property, 
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.put(USER_ID, userId);
 		JSONObject newProperty = propertyService.create(property);
 		return newProperty;
@@ -57,7 +59,8 @@ public class PropertyResource {
 	@POST
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public JSONObject updateProperty(@HeaderParam("uesrId") String userId, JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject updateProperty(JSONObject property,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		property.put(USER_ID, userId);
 		JSONObject newProperty = propertyService.update(property);
 		return newProperty;
@@ -66,7 +69,8 @@ public class PropertyResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteProperty(@HeaderParam("uesrId") String userId, @FormParam("id") String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject deleteProperty(@FormParam("id") Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.findOne(id, userId);
 		propertyService.delete(property);
 		JSONObject object = new JSONObject();

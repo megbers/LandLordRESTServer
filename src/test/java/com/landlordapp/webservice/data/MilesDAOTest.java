@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.data;
 
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -22,52 +23,65 @@ public class MilesDAOTest {
 	HibernateTemplate template;
 	@InjectMocks
 	private final MilesDAO dao = new MilesDAO();
-	private Miles Miles;
+	private Miles miles;
 	private final Long id = 1001L;
 	private final String userId = "userId";
 
 	@Before
 	public void doBeforeEachTestCase() {
-		Miles = new Miles();
+		miles = new Miles();
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void saveShouldUpdateTheDatabase() {
-		Miles actual = dao.save(Miles);
-		verify(template).saveOrUpdate(Miles);
-		assertEquals(Miles, actual);
+		Miles actual = dao.save(miles);
+		verify(template).saveOrUpdate(miles);
+		assertEquals(miles, actual);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void saveShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).saveOrUpdate(Miles);
-		dao.save(Miles);
+		doThrow(new RuntimeException()).when(template).saveOrUpdate(miles);
+		dao.save(miles);
 	}
-
+	
+	
 	@Test
 	public void findByIdShouldFindAMiles() {
-		when(template.get("com.landlordapp.webservice.domain.Miles", id)).thenReturn(Miles);
+		List<Miles> milesList = new ArrayList<Miles>();
+		milesList.add(miles);
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Miles as model where model.id = ? and model.userId = ?", values)).thenReturn(milesList);
 		Miles actual = dao.findById(id, userId);
-		assertEquals(Miles, actual);
+		assertEquals(miles, actual);
 	}
-
-	@Test(expected = RuntimeException.class)
+	
+	@Test
+	public void findByIdShouldNotThrowExceptionWhenNoPropertiesFound() {
+		List<Miles> milesList = new ArrayList<Miles>();
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Miles as model where model.id = ? and model.userId = ?", values)).thenReturn(milesList);
+		assertNull(dao.findById(id, userId));
+	}
+	
+	@Test(expected = RuntimeException.class) 
 	public void findByIdShouldThrowExcpetionIfRaised() {
-		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Miles", id);
+		Object[] values = {id, userId};
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Miles as model where model.id = ? and model.userId = ?", values);
 		dao.findById(id, userId);
 	}
-
+	
 	@Test
 	public void deleteMilesShouldDeleteMiles() {
-		dao.delete(Miles);
-		verify(template).delete(Miles);
+		dao.delete(miles);
+		verify(template).delete(miles);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void deleteMilesShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).delete(Miles);
-		dao.delete(Miles);
+		doThrow(new RuntimeException()).when(template).delete(miles);
+		dao.delete(miles);
 	}
 
 	@Test

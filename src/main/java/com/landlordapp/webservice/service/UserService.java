@@ -5,7 +5,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 public interface UserService {
-	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException;
+	public JSONObject findOne(Long id) throws JSONException, IllegalArgumentException, IllegalAccessException;
 
 	public JSONObject create(JSONObject user) throws JSONException, IllegalArgumentException, IllegalAccessException;
 

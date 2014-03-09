@@ -54,7 +54,7 @@ public class PropertyServiceITest {
 		property.setId(id);
 		when(propertyDAO.findById(id, userId)).thenReturn(property);
 		
-		JSONObject object = service.findOne(idString, userId);
+		JSONObject object = service.findOne(id, userId);
 		assertEquals(object.get("id"), id);
 	}
 	
@@ -62,7 +62,7 @@ public class PropertyServiceITest {
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(propertyDAO.findById(id, userId)).thenReturn(null);
 		
-		JSONObject object = service.findOne(idString, userId);
+		JSONObject object = service.findOne(id, userId);
 		assertNull(object);
 	}
 	

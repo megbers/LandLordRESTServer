@@ -32,7 +32,7 @@ public class PersonResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllPersons(@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONArray findAllPersons(@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = personService.findAll(userId);
 		return response;
 	}
@@ -40,8 +40,8 @@ public class PersonResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findPerson(@PathParam("id") final String id,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject findPerson(@PathParam("id") final Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = personService.findOne(id, userId);
 		return response;
 	}
@@ -50,7 +50,7 @@ public class PersonResource {
 	@Path("findByProperty/{propertyId}")
 	@Produces(APPLICATION_JSON)
 	public JSONArray findPersonByProperty(@PathParam("propertyId") Long propertyId,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = personService.findByProperty(propertyId, userId);
 		return response;
 	}
@@ -59,7 +59,7 @@ public class PersonResource {
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
 	public JSONObject createPerson(final JSONObject person,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		person.put(USER_ID, userId);
 		JSONObject newPerson = personService.create(person);
 		return newPerson;
@@ -69,7 +69,7 @@ public class PersonResource {
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
 	public JSONObject updatePerson(final JSONObject person,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		person.put(USER_ID, userId);
 		JSONObject newPerson = personService.update(person);
 		return newPerson;
@@ -78,8 +78,8 @@ public class PersonResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deletePerson(@FormParam("id") final String id,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject deletePerson(@FormParam("id") final Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject person = personService.findOne(id, userId);
 		personService.delete(person);
 		JSONObject object = new JSONObject();

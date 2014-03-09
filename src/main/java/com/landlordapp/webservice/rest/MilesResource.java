@@ -35,7 +35,7 @@ public class MilesResource {
 	@GET
 	@Path("findAll")
 	@Produces(APPLICATION_JSON)
-	public JSONArray findAllMiless(@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONArray findAllMiless(@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = milesService.findAll(userId);
 		return response;
 	}
@@ -44,7 +44,7 @@ public class MilesResource {
 	@Path("findByProperty/{propertyId}")
 	@Produces(APPLICATION_JSON)
 	public JSONArray findMilessByProperty(@PathParam("propertyId") Long propertyId,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray response = milesService.findByProperty(propertyId, userId);
 		return response;
 	}
@@ -52,8 +52,8 @@ public class MilesResource {
 	@GET
 	@Path("find/{id}")
 	@Produces(APPLICATION_JSON)
-	public JSONObject findMiles(@PathParam("id") String id,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject findMiles(@PathParam("id") Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject response = milesService.findOne(id, userId);
 		return response;
 	}
@@ -62,7 +62,7 @@ public class MilesResource {
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
 	public JSONObject createMiles(JSONObject miles,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		miles.put(USER_ID, userId);
 		JSONObject newMiles = milesService.create(miles);
 		JSONObject newNote = new JSONObject();
@@ -77,7 +77,7 @@ public class MilesResource {
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
 	public JSONObject updateMiles(JSONObject miles,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		miles.put(USER_ID, userId);
 		JSONObject newMiles = milesService.update(miles);
 		return newMiles;
@@ -86,8 +86,8 @@ public class MilesResource {
 	@DELETE
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_FORM_URLENCODED)
-	public JSONObject deleteMiles(@FormParam("id") String id,
-			@HeaderParam("uesrId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+	public JSONObject deleteMiles(@FormParam("id") Long id,
+			@HeaderParam("userId") String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject miles = milesService.findOne(id, userId);
 		milesService.delete(miles);
 		JSONObject object = new JSONObject();

@@ -19,11 +19,17 @@ public class NoteDAO extends HibernateDaoSupport {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public Note findById(Long id) {
+	public Note findById(Long id, String userId) {
 		try {
-			Note instance = (Note) getHibernateTemplate().get("com.landlordapp.webservice.domain.Note", id);
-			return instance;
+			Object[] values = {id, userId};
+			String queryString = "from com.landlordapp.webservice.domain.Note as model where model.id = ? and model.userId = ?";
+			List notes = getHibernateTemplate().find(queryString, values);
+			if(notes.size() > 0) {
+				return (Note) notes.get(0);
+			}
+			return null;
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -40,9 +46,11 @@ public class NoteDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<Note> findAll() {
+	public List<Note> findAll(String userId) {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Note");
+			String queryString = "from com.landlordapp.webservice.domain.Note as model where model.userId = ?";
+			Object[] values = {userId};
+			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -50,10 +58,10 @@ public class NoteDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public List findByProperty(Long propertyId){
+	public List findByProperty(Long propertyId, String userId){
 		try {
-			String queryString = "from Note as model where model.property.id= ?";
-			Object[] values = {propertyId};
+			String queryString = "from com.landlordapp.webservice.domain.Note as model where model.property.id= ? and model.userId = ?";
+			Object[] values = {propertyId, userId};
 			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;

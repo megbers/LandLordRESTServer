@@ -49,7 +49,7 @@ public class UserServiceITest {
 		user.setId(id);
 		when(userDAO.findById(id)).thenReturn(user);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(id);
 		assertEquals(object.get("id"), id);
 	}
 
@@ -57,7 +57,7 @@ public class UserServiceITest {
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(userDAO.findById(id)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(id);
 		assertNull(object);
 	}
 

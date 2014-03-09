@@ -22,8 +22,8 @@ public class PropertyServiceI implements PropertyService {
 	private PersonDAO personDAO;
 	
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONObject findOne(String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Property property = propertyDAO.findById(Long.parseLong(id), userId);
+	public JSONObject findOne(Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Property property = propertyDAO.findById(id, userId);
 		if(property == null) {
 			return null;
 		}
@@ -39,7 +39,7 @@ public class PropertyServiceI implements PropertyService {
 	private void addTenants(JSONObject jsonProperty, Property property) {
 		Person person;
 		try {
-			person = personDAO.findById(jsonProperty.getLong("tenant"));
+			person = personDAO.findById(jsonProperty.getLong("tenant"), jsonProperty.getString("userId"));
 			Set<Person> tenants = new HashSet<Person>();
 			tenants.add(person);
 			person.setProperty(property);

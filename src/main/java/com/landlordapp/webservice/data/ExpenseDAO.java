@@ -19,12 +19,17 @@ public class ExpenseDAO extends HibernateDaoSupport {
 		}
 	}
 	
-	//TODO Take into effect the userId
+	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public Expense findById(Long id, String userId) {
 		try {
-			Expense instance = (Expense) getHibernateTemplate().get("com.landlordapp.webservice.domain.Expense", id);
-			return instance;
+			Object[] values = {id, userId};
+			String queryString = "from com.landlordapp.webservice.domain.Expense as model where model.id = ? and model.userId = ?";
+			List expenses = getHibernateTemplate().find(queryString, values);
+			if(expenses.size() > 0) {
+				return (Expense) expenses.get(0);
+			}
+			return null;
 		} catch (RuntimeException re) {
 			throw re;
 		}

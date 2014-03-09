@@ -27,13 +27,13 @@ public class MilesResourceTest {
 
 	@InjectMocks
 	private final MilesResource resource = new MilesResource();
-	private String id;
+	private Long id;
 	private JSONObject fakeMiles;
 	private String userId = "this is the user id";
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "Miles id";
+		id = 123L;
 		fakeMiles = new JSONObject();
 		fakeMiles.put("id", id);
 		fakeMiles.put("milesDate", "");

@@ -16,8 +16,8 @@ public class MilesServiceI implements MilesService {
 	private MilesDAO milesDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject findOne(final String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Miles miles = milesDAO.findById(Long.parseLong(id), userId);
+	public JSONObject findOne(final Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Miles miles = milesDAO.findById(id, userId);
 		if (miles == null) {
 			return null;
 		}

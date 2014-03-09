@@ -17,8 +17,8 @@ public class ExpenseServiceI implements ExpenseService {
 	private ExpenseDAO expenseDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject findOne(final String id, final String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Expense expense = expenseDAO.findById(Long.parseLong(id), userId);
+	public JSONObject findOne(final Long id, final String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Expense expense = expenseDAO.findById(id, userId);
 		if (expense == null) {
 			return null;
 		}

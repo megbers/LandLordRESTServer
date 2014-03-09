@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface PersonService {
-	public JSONObject findOne(String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
+	public JSONObject findOne(Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
 
 	public JSONObject create(JSONObject property) throws JSONException, IllegalArgumentException, IllegalAccessException;
 

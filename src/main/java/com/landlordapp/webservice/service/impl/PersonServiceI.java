@@ -16,8 +16,8 @@ public class PersonServiceI implements PersonService {
 
 	private PersonDAO personDAO;
 
-	public JSONObject findOne(final String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Person person = personDAO.findById(Long.parseLong(id), userId);
+	public JSONObject findOne(final Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Person person = personDAO.findById(id, userId);
 		if (person == null) {
 			return null;
 		}

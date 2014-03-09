@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.data;
 
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -47,15 +48,27 @@ public class PropertyDAOTest {
 	}
 	
 	@Test
-	public void findByIdShouldFindAUser() {
-		when(template.get("com.landlordapp.webservice.domain.Property", id)).thenReturn(property);
+	public void findByIdShouldFindAProperty() {
+		List<Property> properties = new ArrayList<Property>();
+		properties.add(property);
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Property as model where model.id = ? and model.userId = ?", values)).thenReturn(properties);
 		Property actual = dao.findById(id, userId);
 		assertEquals(property, actual);
 	}
 	
+	@Test
+	public void findByIdShouldNotThrowExceptionWhenNoPropertiesFound() {
+		List<Property> properties = new ArrayList<Property>();
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Property as model where model.id = ? and model.userId = ?", values)).thenReturn(properties);
+		assertNull(dao.findById(id, userId));
+	}
+	
 	@Test(expected = RuntimeException.class) 
 	public void findByIdShouldThrowExcpetionIfRaised() {
-		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Property", id);
+		Object[] values = {id, userId};
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Property as model where model.id = ? and model.userId = ?", values);
 		dao.findById(id, userId);
 	}
 	

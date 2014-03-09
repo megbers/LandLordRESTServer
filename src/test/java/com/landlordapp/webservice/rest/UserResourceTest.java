@@ -24,12 +24,12 @@ public class UserResourceTest {
 	UserServiceI service;
 	@InjectMocks
 	private final UserResource resource = new UserResource();
-	private String id;
+	private Long id;
 	private JSONObject fakeUser;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "user id";
+		id = 478329L;
 		fakeUser = new JSONObject();
 		fakeUser.put("id", id);
 		MockitoAnnotations.initMocks(this);

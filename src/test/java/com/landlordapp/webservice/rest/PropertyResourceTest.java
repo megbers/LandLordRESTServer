@@ -24,13 +24,13 @@ public class PropertyResourceTest {
 	PropertyServiceI service;
 	@InjectMocks
 	private PropertyResource resource = new PropertyResource();
-	private String id;
+	private Long id;
 	private String userId;
 	private JSONObject fakeProperty;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "property id";
+		id = 2L;
 		userId = "userId";
 		fakeProperty = new JSONObject();
 		fakeProperty.put("id", id);
@@ -50,35 +50,35 @@ public class PropertyResourceTest {
 	@Test
 	public void findOneShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(fakeProperty);
-		JSONObject property = resource.findProperty(userId, id);
+		JSONObject property = resource.findProperty(id, userId);
 		assertEquals(property.get("id"), id);
 	}
 	
 	@Test
 	public void findOneShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(null);
-		JSONObject property = resource.findProperty(userId, id);
+		JSONObject property = resource.findProperty(id, userId);
 		assertNull(property);
 	}
 	
 	@Test
 	public void createUserShouldReturnUserId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeProperty)).thenReturn(fakeProperty);
-		JSONObject user = resource.createProperty(userId, fakeProperty);
+		JSONObject user = resource.createProperty(fakeProperty, userId);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void updateUserUserShouldReturnUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeProperty)).thenReturn(fakeProperty);
-		JSONObject user = resource.updateProperty(userId, fakeProperty);
+		JSONObject user = resource.updateProperty(fakeProperty, userId);
 		assertEquals(user.get("id"), id);
 	}
 	
 	@Test
 	public void deleteUserShouldDeleteUser() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(fakeProperty);
-		JSONObject json = resource.deleteProperty(userId, id);
+		JSONObject json = resource.deleteProperty(id, userId);
 		verify(service).delete(fakeProperty);
 		assertEquals(json.get("success"), 1);
 	}

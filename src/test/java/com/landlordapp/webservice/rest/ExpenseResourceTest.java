@@ -22,13 +22,13 @@ public class ExpenseResourceTest {
 	ExpenseServiceI service;
 	@InjectMocks
 	private final ExpenseResource resource = new ExpenseResource();
-	private String id;
+	private Long id;
 	private String userId = "this is the user id";
 	private JSONObject fakeExpense;
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "expense id";
+		id = 1L;
 		fakeExpense = new JSONObject();
 		fakeExpense.put("id", id);
 		fakeExpense.put("userId", userId);

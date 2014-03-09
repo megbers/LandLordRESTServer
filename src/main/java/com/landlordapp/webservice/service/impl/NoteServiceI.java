@@ -16,8 +16,8 @@ public class NoteServiceI implements NoteService {
 	private NoteDAO noteDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject findOne(final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Note note = noteDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(final Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Note note = noteDAO.findById(id, userId);
 		if (note == null) {
 			return null;
 		}
@@ -44,8 +44,8 @@ public class NoteServiceI implements NoteService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Note> noteList = this.noteDAO.findAll();
+	public JSONArray findAll(String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Note> noteList = this.noteDAO.findAll(userId);
 		JSONArray noteJSONArray = new JSONArray();
 		for (Note note : noteList) {
 			noteJSONArray.put(note.toJSONObject());
@@ -55,8 +55,8 @@ public class NoteServiceI implements NoteService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findByProperty(final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Note> noteList = this.noteDAO.findByProperty(propertyId);
+	public JSONArray findByProperty(final Long propertyId, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Note> noteList = this.noteDAO.findByProperty(propertyId, userId);
 		JSONArray noteJSONArray = new JSONArray();
 		for (Note note : noteList) {
 			noteJSONArray.put(note.toJSONObject());

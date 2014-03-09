@@ -19,11 +19,17 @@ public class PersonDAO extends HibernateDaoSupport {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public Person findById(final Long id, String userId) {
 		try {
-			Person instance = (Person) getHibernateTemplate().get("com.landlordapp.webservice.domain.Person", id);
-			return instance;
+			Object[] values = {id, userId};
+			String queryString = "from com.landlordapp.webservice.domain.Person as model where model.id = ? and model.userId = ?";
+			List people = getHibernateTemplate().find(queryString, values);
+			if(people.size() > 0) {
+				return (Person) people.get(0);
+			}
+			return null;
 		} catch (RuntimeException re) {
 			throw re;
 		}

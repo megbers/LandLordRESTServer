@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MilesService {
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public JSONObject findOne(String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
+	public JSONObject findOne(Long id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException;
 	
 	public JSONObject create(JSONObject miles) throws JSONException, IllegalArgumentException, IllegalAccessException;
 	

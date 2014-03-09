@@ -61,7 +61,7 @@ public class MilesServiceITest {
 		miles.setId(id);
 		when(milesDAO.findById(id, userId)).thenReturn(miles);
 
-		JSONObject object = service.findOne(idString, userId);
+		JSONObject object = service.findOne(id, userId);
 		assertEquals(object.get("id"), id);
 	}
 
@@ -69,7 +69,7 @@ public class MilesServiceITest {
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(milesDAO.findById(id, userId)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString, userId);
+		JSONObject object = service.findOne(id, userId);
 		assertNull(object);
 	}
 

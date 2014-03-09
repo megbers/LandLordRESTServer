@@ -50,12 +50,12 @@ public class PropertyResourceIntegrationTest {
 	
 	@Test
 	public void createShouldCreateAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		JSONObject property = resource.createProperty(USER_ID, createPropertyForTest(ADDRESS));
+		JSONObject property = resource.createProperty(createPropertyForTest(ADDRESS), USER_ID);
 		
 		assertNotNull(property.getLong("id"));
 		assertEquals(property.getString("address"), ADDRESS);
 		
-		JSONObject propertyFromDatabase = propertyService.findOne(USER_ID, property.getString("id"));
+		JSONObject propertyFromDatabase = propertyService.findOne(property.getLong("id"), USER_ID);
 		assertNotNull(propertyFromDatabase);
 		assertEquals(propertyFromDatabase.getString("address"), ADDRESS);
 		
@@ -67,10 +67,10 @@ public class PropertyResourceIntegrationTest {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
 		
 		property.put("address", ADDRESS_UPDATED);
-		property = resource.updateProperty(USER_ID, property);
+		property = resource.updateProperty(property, USER_ID);
 		assertEquals(property.getString("address"), ADDRESS_UPDATED);
 		
-		JSONObject propertyFromDatabase = propertyService.findOne(USER_ID, property.getString("id"));
+		JSONObject propertyFromDatabase = propertyService.findOne(property.getLong("id"), USER_ID);
 		assertNotNull(propertyFromDatabase);
 		assertEquals(propertyFromDatabase.getString("address"), ADDRESS_UPDATED);
 		
@@ -81,7 +81,7 @@ public class PropertyResourceIntegrationTest {
 	public void findOneShouldReturnAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
 		
-		JSONObject propertyFromDatabase = resource.findProperty(USER_ID, property.getString("id"));
+		JSONObject propertyFromDatabase = resource.findProperty(property.getLong("id"), USER_ID);
 		assertEquals(propertyFromDatabase.get("address"), ADDRESS);
 		
 		propertiesToDelete.add(property);
@@ -89,7 +89,7 @@ public class PropertyResourceIntegrationTest {
 	
 	@Test
 	public void findOneShouldReturnNullWhenNoPropertyFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		assertNull(resource.findProperty(USER_ID, "1001"));
+		assertNull(resource.findProperty(1001L, USER_ID));
 	}
 	
 	@Test
@@ -110,17 +110,17 @@ public class PropertyResourceIntegrationTest {
 	@Test
 	public void deleteShouldRemoveAProperty() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONObject property = propertyService.create(createPropertyForTest(ADDRESS));
-		JSONObject deleteResponse = resource.deleteProperty(USER_ID, property.getString("id"));
+		JSONObject deleteResponse = resource.deleteProperty(property.getLong("id"), USER_ID);
 		
 		assertEquals(deleteResponse.getInt("success"), 1);
-		assertNull(resource.findProperty(USER_ID, property.getString("id")));
+		assertNull(resource.findProperty(property.getLong("id"), USER_ID));
 	}
 	
 	
 	private JSONObject createPropertyForTest(String address) throws JSONException {
 		JSONObject newProperty = new JSONObject();
 		newProperty.put("address", address);
-		newProperty.put("uesrId", USER_ID);
+		newProperty.put("userId", USER_ID);
 		return newProperty;
 	}
 }

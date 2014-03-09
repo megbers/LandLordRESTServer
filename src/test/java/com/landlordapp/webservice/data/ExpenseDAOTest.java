@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.data;
 
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -23,52 +24,64 @@ public class ExpenseDAOTest {
 	HibernateTemplate template;
 	@InjectMocks
 	private final ExpenseDAO dao = new ExpenseDAO();
-	private Expense Expense;
+	private Expense expense;
 	private final Long id = 1001L;
 	private final String userId = "userId";
 
 	@Before
 	public void doBeforeEachTestCase() {
-		Expense = new Expense();
+		expense = new Expense();
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void saveShouldUpdateTheDatabase() {
-		Expense actual = dao.save(Expense);
-		verify(template).saveOrUpdate(Expense);
-		assertEquals(Expense, actual);
+		Expense actual = dao.save(expense);
+		verify(template).saveOrUpdate(expense);
+		assertEquals(expense, actual);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void saveShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).saveOrUpdate(Expense);
-		dao.save(Expense);
+		doThrow(new RuntimeException()).when(template).saveOrUpdate(expense);
+		dao.save(expense);
 	}
 
 	@Test
-	public void findByIdShouldFindAUser() {
-		when(template.get("com.landlordapp.webservice.domain.Expense", id)).thenReturn(Expense);
+	public void findByIdShouldFindAExpense() {
+		List<Expense> expenses = new ArrayList<Expense>();
+		expenses.add(expense);
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Expense as model where model.id = ? and model.userId = ?", values)).thenReturn(expenses);
 		Expense actual = dao.findById(id, userId);
-		assertEquals(Expense, actual);
+		assertEquals(expense, actual);
 	}
-
-	@Test(expected = RuntimeException.class)
+	
+	@Test
+	public void findByIdShouldNotThrowExceptionWhenNoPropertiesFound() {
+		List<Expense> expenses = new ArrayList<Expense>();
+		Object[] values = {id, userId};
+		when(template.find("from com.landlordapp.webservice.domain.Expense as model where model.id = ? and model.userId = ?", values)).thenReturn(expenses);
+		assertNull(dao.findById(id, userId));
+	}
+	
+	@Test(expected = RuntimeException.class) 
 	public void findByIdShouldThrowExcpetionIfRaised() {
-		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Expense", id);
+		Object[] values = {id, userId};
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Expense as model where model.id = ? and model.userId = ?", values);
 		dao.findById(id, userId);
 	}
 
 	@Test
 	public void deleteExpenseShouldDeleteExpense() {
-		dao.delete(Expense);
-		verify(template).delete(Expense);
+		dao.delete(expense);
+		verify(template).delete(expense);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void deleteExpenseShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).delete(Expense);
-		dao.delete(Expense);
+		doThrow(new RuntimeException()).when(template).delete(expense);
+		dao.delete(expense);
 	}
 
 	@Test

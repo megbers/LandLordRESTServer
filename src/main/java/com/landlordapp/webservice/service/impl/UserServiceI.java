@@ -17,8 +17,8 @@ public class UserServiceI implements UserService {
 	
 	private UserDAO userDAO;
 	
-	public JSONObject findOne(String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		User user = userDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(Long id) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		User user = userDAO.findById(id);
 		if(user == null) {
 			return null;
 		}

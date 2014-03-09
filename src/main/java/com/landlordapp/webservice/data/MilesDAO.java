@@ -19,12 +19,17 @@ public class MilesDAO extends HibernateDaoSupport {
 		}
 	}
 	
-	//TODO Take into effect the userId
+	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public Miles findById(Long id, String userId) {
 		try {
-			Miles instance = (Miles) getHibernateTemplate().get("com.landlordapp.webservice.domain.Miles", id);
-			return instance;
+			Object[] values = {id, userId};
+			String queryString = "from com.landlordapp.webservice.domain.Miles as model where model.id = ? and model.userId = ?";
+			List miles = getHibernateTemplate().find(queryString, values);
+			if(miles.size() > 0) {
+				return (Miles) miles.get(0);
+			}
+			return null;
 		} catch (RuntimeException re) {
 			throw re;
 		}

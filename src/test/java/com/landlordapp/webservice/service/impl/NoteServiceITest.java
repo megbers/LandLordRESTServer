@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.service.impl;
 
+import static com.landlordapp.webservice.domain.Note.USER_ID;
 import static com.landlordapp.webservice.domain.Note.ID;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
@@ -33,7 +34,7 @@ public class NoteServiceITest {
 	private final Long id = 1001L;
 	private Note note;
 	private JSONObject jsonNote;
-
+	private final String userId = "This is the user id";
 	public Date date;
 	public Property property;
 
@@ -46,23 +47,24 @@ public class NoteServiceITest {
 		jsonNote.put("id", idString);
 		jsonNote.put("property", property);
 		jsonNote.put("text", "TEXT");
+		jsonNote.put(USER_ID, userId);
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findOneShouldReturnNoteWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		note.setId(id);
-		when(noteDAO.findById(id)).thenReturn(note);
+		when(noteDAO.findById(id, userId)).thenReturn(note);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(id, userId);
 		assertEquals(object.get("id"), id);
 	}
 
 	@Test
 	public void findOneShouldReturnNullWhenNoNoteIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(noteDAO.findById(id)).thenReturn(null);
+		when(noteDAO.findById(id, userId)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(id, userId);
 		assertNull(object);
 	}
 
@@ -85,8 +87,8 @@ public class NoteServiceITest {
 		note.setId(1L);
 		list.add(note);
 
-		when(noteDAO.findAll()).thenReturn(list);
-		JSONArray actual = service.findAll();
+		when(noteDAO.findAll(userId)).thenReturn(list);
+		JSONArray actual = service.findAll(userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
 		assertEquals("Text", actual.getJSONObject(0).getString(Note.TEXT));
@@ -101,8 +103,8 @@ public class NoteServiceITest {
 		note.setId(1L);
 		list.add(note);
 
-		when(noteDAO.findByProperty(propertyId)).thenReturn(list);
-		JSONArray actual = service.findByProperty(propertyId);
+		when(noteDAO.findByProperty(propertyId, userId)).thenReturn(list);
+		JSONArray actual = service.findByProperty(propertyId, userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get(ID));
 		assertEquals("Text", actual.getJSONObject(0).getString(Note.TEXT));

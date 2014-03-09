@@ -22,13 +22,13 @@ public class PersonResourceTest {
 	PersonServiceI service;
 	@InjectMocks
 	private final PersonResource resource = new PersonResource();
-	private String id;
+	private Long id;
 	private JSONObject fakePerson;
 	private String userId = "this is the user id";
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
-		id = "person id";
+		id = 4738L;
 		fakePerson = new JSONObject();
 		fakePerson.put("id", id);
 		fakePerson.put(USER_ID, userId);
