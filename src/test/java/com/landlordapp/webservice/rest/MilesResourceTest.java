@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.rest;
 
+import static com.landlordapp.webservice.domain.Miles.USER_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
@@ -28,6 +29,7 @@ public class MilesResourceTest {
 	private final MilesResource resource = new MilesResource();
 	private String id;
 	private JSONObject fakeMiles;
+	private String userId = "this is the user id";
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
@@ -36,14 +38,15 @@ public class MilesResourceTest {
 		fakeMiles.put("id", id);
 		fakeMiles.put("milesDate", "");
 		fakeMiles.put("property", "{id: 1}");
+		fakeMiles.put("userId", userId);
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findAllShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		JSONArray milesList = new JSONArray();
-		when(service.findAll()).thenReturn(milesList);
-		JSONArray actual = resource.findAllMiless();
+		when(service.findAll(userId)).thenReturn(milesList);
+		JSONArray actual = resource.findAllMiless(userId);
 		assertEquals(milesList, actual);
 	}
 
@@ -51,22 +54,22 @@ public class MilesResourceTest {
 	public void findByPropertyShouldReturnJSONArray() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		Long propertyId = 1L;
 		JSONArray milesList = new JSONArray();
-		when(service.findByProperty(propertyId)).thenReturn(milesList);
-		JSONArray actual = resource.findMilessByProperty(propertyId);
+		when(service.findByProperty(propertyId, userId)).thenReturn(milesList);
+		JSONArray actual = resource.findMilessByProperty(propertyId, userId);
 		assertEquals(milesList, actual);
 	}
 
 	@Test
 	public void findMilesShouldReturnMilesId() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(fakeMiles);
-		JSONObject miles = resource.findMiles(id);
+		when(service.findOne(id, userId)).thenReturn(fakeMiles);
+		JSONObject miles = resource.findMiles(id, userId);
 		assertEquals(miles.get("id"), id);
 	}
 
 	@Test
 	public void findMilesShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(null);
-		JSONObject miles = resource.findMiles(id);
+		when(service.findOne(id, userId)).thenReturn(null);
+		JSONObject miles = resource.findMiles(id, userId);
 		assertNull(miles);
 	}
 
@@ -74,22 +77,24 @@ public class MilesResourceTest {
 	public void createMilesShouldReturnMilesId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeMiles)).thenReturn(fakeMiles);
 		when(noteService.create(Mockito.any(JSONObject.class))).thenReturn(new JSONObject());
-		JSONObject miles = resource.createMiles(fakeMiles);
+		JSONObject miles = resource.createMiles(fakeMiles, userId);
 		verify(noteService).create(Mockito.any(JSONObject.class));
 		assertEquals(miles.get("id"), id);
+		assertEquals(miles.get(USER_ID), userId);
 	}
 
 	@Test
 	public void updateMilesMilesShouldReturnMiles() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeMiles)).thenReturn(fakeMiles);
-		JSONObject miles = resource.updateMiles(fakeMiles);
+		JSONObject miles = resource.updateMiles(fakeMiles, userId);
 		assertEquals(miles.get("id"), id);
+		assertEquals(miles.get(USER_ID), userId);
 	}
 
 	@Test
 	public void deleteMilesShouldDeleteMiles() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(service.findOne(id)).thenReturn(fakeMiles);
-		JSONObject json = resource.deleteMiles(id);
+		when(service.findOne(id, userId)).thenReturn(fakeMiles);
+		JSONObject json = resource.deleteMiles(id, userId);
 		verify(service).delete(fakeMiles);
 		assertEquals(json.get("success"), 1);
 	}

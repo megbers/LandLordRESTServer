@@ -16,8 +16,8 @@ public class MilesServiceI implements MilesService {
 	private MilesDAO milesDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject findOne(final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Miles miles = milesDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(final String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Miles miles = milesDAO.findById(Long.parseLong(id), userId);
 		if (miles == null) {
 			return null;
 		}
@@ -44,8 +44,8 @@ public class MilesServiceI implements MilesService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Miles> milesList = this.milesDAO.findAll();
+	public JSONArray findAll(String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Miles> milesList = this.milesDAO.findAll(userId);
 		JSONArray milesJSONArray = new JSONArray();
 		for (Miles miles : milesList) {
 			milesJSONArray.put(miles.toJSONObject());
@@ -55,8 +55,8 @@ public class MilesServiceI implements MilesService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findByProperty(final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Miles> milesList = this.milesDAO.findByProperty(propertyId);
+	public JSONArray findByProperty(final Long propertyId, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Miles> milesList = this.milesDAO.findByProperty(propertyId, userId);
 		JSONArray milesJSONArray = new JSONArray();
 		for (Miles miles : milesList) {
 			milesJSONArray.put(miles.toJSONObject());

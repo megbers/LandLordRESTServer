@@ -34,7 +34,7 @@ public class MilesServiceITest {
 	private final Long id = 1001L;
 	private Miles miles;
 	private JSONObject jsonMiles;
-
+	private final String userId = "This is the user id";
 	public Date date;
 	public Double numberOfMiles;
 	public Property property;
@@ -51,23 +51,24 @@ public class MilesServiceITest {
 		jsonMiles.put("numberOfMiles", numberOfMiles);
 		jsonMiles.put("property", property);
 		jsonMiles.put("milesType", "BANK");
+		jsonMiles.put(Miles.USER_ID, userId);
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findOneShouldReturnUserWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		miles.setId(id);
-		when(milesDAO.findById(id)).thenReturn(miles);
+		when(milesDAO.findById(id, userId)).thenReturn(miles);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertEquals(object.get("id"), id);
 	}
 
 	@Test
 	public void findOneShouldReturnNullWhenNoUserIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(milesDAO.findById(id)).thenReturn(null);
+		when(milesDAO.findById(id, userId)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertNull(object);
 	}
 
@@ -90,8 +91,8 @@ public class MilesServiceITest {
 		miles.setId(1L);
 		list.add(miles);
 
-		when(milesDAO.findAll()).thenReturn(list);
-		JSONArray actual = service.findAll();
+		when(milesDAO.findAll(userId)).thenReturn(list);
+		JSONArray actual = service.findAll(userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
 		assertEquals("123.45", actual.getJSONObject(0).getString("numberOfMiles"));
@@ -106,8 +107,8 @@ public class MilesServiceITest {
 		miles.setId(1L);
 		list.add(miles);
 
-		when(milesDAO.findByProperty(propertyId)).thenReturn(list);
-		JSONArray actual = service.findByProperty(propertyId);
+		when(milesDAO.findByProperty(propertyId, userId)).thenReturn(list);
+		JSONArray actual = service.findByProperty(propertyId, userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get(ID));
 		assertEquals("1234.56", actual.getJSONObject(0).getString(NUMBER_OF_MILES));

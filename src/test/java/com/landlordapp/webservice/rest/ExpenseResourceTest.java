@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.rest;
 
+import static com.landlordapp.webservice.domain.Expense.USER_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
@@ -47,42 +48,44 @@ public class ExpenseResourceTest {
 		Long propertyId = 1L;
 		JSONArray expenses = new JSONArray();
 		when(service.findByProperty(propertyId, userId)).thenReturn(expenses);
-		JSONArray actual = resource.findExpensesByProperty(userId, propertyId);
+		JSONArray actual = resource.findExpensesByProperty(propertyId, userId);
 		assertEquals(expenses, actual);
 	}
 
 	@Test
 	public void findExpenseShouldReturnExpenseId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(fakeExpense);
-		JSONObject expense = resource.findExpense(userId, id);
+		JSONObject expense = resource.findExpense(id, userId);
 		assertEquals(expense.get("id"), id);
 	}
 
 	@Test
 	public void findExpenseShouldReturnNullIfNotFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(null);
-		JSONObject expense = resource.findExpense(userId, id);
+		JSONObject expense = resource.findExpense(id, userId);
 		assertNull(expense);
 	}
 
 	@Test
 	public void createExpenseShouldReturnExpenseId() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.create(fakeExpense)).thenReturn(fakeExpense);
-		JSONObject expense = resource.createExpense(userId, fakeExpense);
+		JSONObject expense = resource.createExpense(fakeExpense, userId);
 		assertEquals(expense.get("id"), id);
+		assertEquals(expense.get(USER_ID), userId);
 	}
 
 	@Test
 	public void updateExpenseExpenseShouldReturnExpense() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.update(fakeExpense)).thenReturn(fakeExpense);
-		JSONObject expense = resource.updateExpense(userId, fakeExpense);
+		JSONObject expense = resource.updateExpense(fakeExpense, userId);
 		assertEquals(expense.get("id"), id);
+		assertEquals(expense.get(USER_ID), userId);
 	}
 
 	@Test
 	public void deleteExpenseShouldDeleteExpense() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		when(service.findOne(id, userId)).thenReturn(fakeExpense);
-		JSONObject json = resource.deleteExpense(userId, id);
+		JSONObject json = resource.deleteExpense(id, userId);
 		verify(service).delete(fakeExpense);
 		assertEquals(json.get("success"), 1);
 	}

@@ -19,6 +19,7 @@ public class ExpenseDAO extends HibernateDaoSupport {
 		}
 	}
 	
+	//TODO Take into effect the userId
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public Expense findById(Long id, String userId) {
 		try {

@@ -19,8 +19,9 @@ public class MilesDAO extends HibernateDaoSupport {
 		}
 	}
 	
+	//TODO Take into effect the userId
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public Miles findById(Long id) {
+	public Miles findById(Long id, String userId) {
 		try {
 			Miles instance = (Miles) getHibernateTemplate().get("com.landlordapp.webservice.domain.Miles", id);
 			return instance;
@@ -40,9 +41,11 @@ public class MilesDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<Miles> findAll() {
+	public List<Miles> findAll(String userId) {
 		try {
-			return getHibernateTemplate().find("from com.landlordapp.webservice.domain.Miles");
+			String queryString = "from com.landlordapp.webservice.domain.Miles as model where model.userId = ?";
+			Object[] values = {userId};
+			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -50,10 +53,10 @@ public class MilesDAO extends HibernateDaoSupport {
 	
 	@SuppressWarnings("rawtypes")
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
-	public List findByProperty(Long propertyId){
+	public List findByProperty(Long propertyId, String userId){
 		try {
-			String queryString = "from Miles as model where model.property.id= ?";
-			Object[] values = {propertyId};
+			String queryString = "from Miles as model where model.property.id= ? and model.userId = ?";
+			Object[] values = {propertyId, userId};
 			return getHibernateTemplate().find(queryString, values);
 		} catch (RuntimeException re) {
 			throw re;
