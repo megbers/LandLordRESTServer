@@ -85,7 +85,7 @@ public class PropertyServiceITest {
 		person.setId(personId);
 		property.getTenants().add(person);
 		
-		when(personDAO.findById(personId)).thenReturn(person);
+		when(personDAO.findById(personId, userId)).thenReturn(person);
 		when(propertyDAO.save(any(Property.class))).thenReturn(property);
 		JSONObject actual = service.create(jsonProperty);
 		

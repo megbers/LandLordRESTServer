@@ -2,6 +2,7 @@ package com.landlordapp.webservice.service.impl;
 
 import static com.landlordapp.webservice.domain.Miles.ID;
 import static com.landlordapp.webservice.domain.Miles.NUMBER_OF_MILES;
+import static com.landlordapp.webservice.domain.Miles.USER_ID;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.Matchers.any;
@@ -51,7 +52,7 @@ public class MilesServiceITest {
 		jsonMiles.put("numberOfMiles", numberOfMiles);
 		jsonMiles.put("property", property);
 		jsonMiles.put("milesType", "BANK");
-		jsonMiles.put(Miles.USER_ID, userId);
+		jsonMiles.put(USER_ID, userId);
 		MockitoAnnotations.initMocks(this);
 	}
 

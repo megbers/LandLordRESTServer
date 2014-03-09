@@ -1,5 +1,6 @@
 package com.landlordapp.webservice.service.impl;
 
+import static com.landlordapp.webservice.domain.Person.USER_ID;
 import static com.landlordapp.webservice.domain.Person.EMAIL;
 import static com.landlordapp.webservice.domain.Person.ID;
 import static com.landlordapp.webservice.domain.Person.NAME;
@@ -36,6 +37,7 @@ public class PersonServiceITest {
 	private final Long id = 1001L;
 	private Person person;
 	private JSONObject jsonPerson;
+	private final String userId = "This is the user id";
 
 	@Before
 	public void doBeforeEachTestCase() throws JSONException {
@@ -47,23 +49,24 @@ public class PersonServiceITest {
 		jsonPerson.put("phone", "phone");
 		jsonPerson.put("name", "name");
 		jsonPerson.put("type", PersonType.TENANT);
+		jsonPerson.put(USER_ID, userId);
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void findOneShouldReturnPersonWhenOneIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
 		person.setId(id);
-		when(personDAO.findById(id)).thenReturn(person);
+		when(personDAO.findById(id, userId)).thenReturn(person);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertEquals(object.get("id"), id);
 	}
 
 	@Test
 	public void findOneShouldReturnNullWhenNoPersonIsFound() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		when(personDAO.findById(id)).thenReturn(null);
+		when(personDAO.findById(id, userId)).thenReturn(null);
 
-		JSONObject object = service.findOne(idString);
+		JSONObject object = service.findOne(idString, userId);
 		assertNull(object);
 	}
 
@@ -87,8 +90,8 @@ public class PersonServiceITest {
 		person.setId(1L);
 		list.add(person);
 
-		when(personDAO.findAll()).thenReturn(list);
-		JSONArray actual = service.findAll();
+		when(personDAO.findAll(userId)).thenReturn(list);
+		JSONArray actual = service.findAll(userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get("id"));
 		assertEquals("email", actual.getJSONObject(0).get("email"));
@@ -108,8 +111,8 @@ public class PersonServiceITest {
 		person.setType(TENANT);
 		list.add(person);
 
-		when(personDAO.findByProperty(propertyId)).thenReturn(list);
-		JSONArray actual = service.findByProperty(propertyId);
+		when(personDAO.findByProperty(propertyId, userId)).thenReturn(list);
+		JSONArray actual = service.findByProperty(propertyId, userId);
 
 		assertEquals(new Long(1), actual.getJSONObject(0).get(ID));
 		assertEquals(TENANT.toString(), actual.getJSONObject(0).getString(TYPE));

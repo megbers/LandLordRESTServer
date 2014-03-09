@@ -26,6 +26,7 @@ public class PersonDAOTest {
 	private final PersonDAO dao = new PersonDAO();
 	private Person person;
 	private final Long id = 1001L;
+	private final String userId = "userId";
 
 	@Before
 	public void doBeforeEachTestCase() {
@@ -49,14 +50,14 @@ public class PersonDAOTest {
 	@Test
 	public void findByIdShouldFindAPerson() {
 		when(template.get("com.landlordapp.webservice.domain.Person", id)).thenReturn(person);
-		Person actual = dao.findById(id);
+		Person actual = dao.findById(id, userId);
 		assertEquals(person, actual);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void findByIdShouldThrowExcpetionIfRaised() {
 		doThrow(new RuntimeException()).when(template).get("com.landlordapp.webservice.domain.Person", id);
-		dao.findById(id);
+		dao.findById(id, userId);
 	}
 
 	@Test
@@ -74,16 +75,18 @@ public class PersonDAOTest {
 	@Test
 	public void findAllShouldFindPersons() {
 		List<Person> list = new ArrayList<Person>();
-		when(template.find("from com.landlordapp.webservice.domain.Person")).thenReturn(list);
-		List<Person> actual = dao.findAll();
-		verify(template).find("from com.landlordapp.webservice.domain.Person");
+		Object[] values = {userId};
+		when(template.find("from com.landlordapp.webservice.domain.Person as model where model.userId = ?", values)).thenReturn(list);
+		List<Person> actual = dao.findAll(userId);
+		verify(template).find("from com.landlordapp.webservice.domain.Person as model where model.userId = ?", values);
 		assertEquals(actual, list);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void findAllShouldThrowExceptionIfRaised() {
-		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Person");
-		dao.findAll();
+		Object[] values = {userId};
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Person as model where model.userId = ?", values);
+		dao.findAll(userId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,19 +94,19 @@ public class PersonDAOTest {
 	public void findByPropertyShouldReturnListOfExpenses() {
 		Long propertyId = 1L;
 		List<Person> list = new ArrayList<Person>();
-		Object[] values = { propertyId };
-		when(template.find("from Person as model where model.property.id= ?", values)).thenReturn(list);
-		List<Expense> actual = dao.findByProperty(propertyId);
-		verify(template).find("from Person as model where model.property.id= ?", values);
+		Object[] values = { propertyId, userId };
+		when(template.find("from com.landlordapp.webservice.domain.Person as model where model.property.id= ? and model.userId = ?", values)).thenReturn(list);
+		List<Expense> actual = dao.findByProperty(propertyId, userId);
+		verify(template).find("from com.landlordapp.webservice.domain.Person as model where model.property.id= ? and model.userId = ?", values);
 		assertEquals(actual, list);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void findByPropertyShouldThrowExceptionIfRaised() {
 		Long propertyId = 1L;
-		Object[] values = { propertyId };
-		doThrow(new RuntimeException()).when(template).find("from Person as model where model.property.id= ?", values);
-		dao.findByProperty(propertyId);
+		Object[] values = { propertyId, userId };
+		doThrow(new RuntimeException()).when(template).find("from com.landlordapp.webservice.domain.Person as model where model.property.id= ? and model.userId = ?", values);
+		dao.findByProperty(propertyId, userId);
 	}
 
 }

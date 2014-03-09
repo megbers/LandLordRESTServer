@@ -16,8 +16,8 @@ public class PersonServiceI implements PersonService {
 
 	private PersonDAO personDAO;
 
-	public JSONObject findOne(final String id) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		Person person = personDAO.findById(Long.parseLong(id));
+	public JSONObject findOne(final String id, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		Person person = personDAO.findById(Long.parseLong(id), userId);
 		if (person == null) {
 			return null;
 		}
@@ -43,8 +43,8 @@ public class PersonServiceI implements PersonService {
 		this.personDAO = personDAO;
 	}
 
-	public JSONArray findAll() throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Person> persons = this.personDAO.findAll();
+	public JSONArray findAll(String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Person> persons = this.personDAO.findAll(userId);
 		JSONArray personJSONArray = new JSONArray();
 		for (Person person : persons) {
 			personJSONArray.put(person.toJSONObject());
@@ -54,8 +54,8 @@ public class PersonServiceI implements PersonService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONArray findByProperty(final Long propertyId) throws JSONException, IllegalArgumentException, IllegalAccessException {
-		List<Person> persons = this.personDAO.findByProperty(propertyId);
+	public JSONArray findByProperty(final Long propertyId, String userId) throws JSONException, IllegalArgumentException, IllegalAccessException {
+		List<Person> persons = this.personDAO.findByProperty(propertyId, userId);
 		JSONArray personJSONArray = new JSONArray();
 		for (Person person : persons) {
 			personJSONArray.put(person.toJSONObject());

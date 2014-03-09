@@ -46,7 +46,7 @@ public class MilesDAOTest {
 	}
 
 	@Test
-	public void findByIdShouldFindAUser() {
+	public void findByIdShouldFindAMiles() {
 		when(template.get("com.landlordapp.webservice.domain.Miles", id)).thenReturn(Miles);
 		Miles actual = dao.findById(id, userId);
 		assertEquals(Miles, actual);
