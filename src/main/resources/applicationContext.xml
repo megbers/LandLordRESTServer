@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:tx="http://www.springframework.org/schema/tx"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.0.xsd
@@ -12,7 +11,7 @@
     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<context:component-scan base-package="com.landlordapp.webservice" />
-	
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/landlord" />
@@ -21,11 +20,12 @@
 		<property name="validationQuery" value="SELECT 1+1" />
 		<property name="testOnBorrow" value="true" />
 	</bean>
-	
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource">
-			<ref bean="dataSource" /> 
-		</property> 
+			<ref bean="dataSource" />
+		</property>
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">
@@ -45,86 +45,112 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-	
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+
 	<bean id="PersonDAO" class="com.landlordapp.webservice.data.PersonDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="personService" class="com.landlordapp.webservice.service.impl.PersonServiceI">
 		<property name="personDAO">
 			<ref bean="PersonDAO" />
-		</property> 
+		</property>
 	</bean>
-	
+
 	<bean id="MilesDAO" class="com.landlordapp.webservice.data.MilesDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="milesService" class="com.landlordapp.webservice.service.impl.MilesServiceI">
 		<property name="milesDAO">
 			<ref bean="MilesDAO" />
-		</property> 
+		</property>
 	</bean>
-	
+
 	<bean id="PropertyDAO" class="com.landlordapp.webservice.data.PropertyDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
-	<bean id="propertyService" class="com.landlordapp.webservice.service.impl.PropertyServiceI">
+
+	<bean id="propertyService"
+		class="com.landlordapp.webservice.service.impl.PropertyServiceI">
 		<property name="propertyDAO">
 			<ref bean="PropertyDAO" />
-		</property> 
+		</property>
 		<property name="personDAO">
 			<ref bean="PersonDAO" />
-		</property> 
+		</property>
 	</bean>
-	
+
 	<bean id="UserDAO" class="com.landlordapp.webservice.data.UserDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="userService" class="com.landlordapp.webservice.service.impl.UserServiceI">
 		<property name="userDAO">
 			<ref bean="UserDAO" />
-		</property> 
+		</property>
 	</bean>
-	
+
 	<bean id="ExpenseDAO" class="com.landlordapp.webservice.data.ExpenseDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="expenseService" class="com.landlordapp.webservice.service.impl.ExpenseServiceI">
 		<property name="expenseDAO">
 			<ref bean="ExpenseDAO" />
-		</property> 
+		</property>
 	</bean>
-	
+
 	<bean id="NoteDAO" class="com.landlordapp.webservice.data.NoteDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="noteService" class="com.landlordapp.webservice.service.impl.NoteServiceI">
 		<property name="noteDAO">
 			<ref bean="NoteDAO" />
-		</property> 
+		</property>
+	</bean>
+
+	<!-- FOR THE QUARTZ JOB -->
+	<bean id="createExpensesTask" class="com.landlordapp.webservice.jobs.CreateExpensesTask" />
+	<bean id="createExpensesJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="createExpensesTask" />
+		<property name="targetMethod" value="createExpenses" />
+	</bean>
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createExpensesJob" />
+		<property name="cronExpression" value="0 0/1 * 1/1 * ? *" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="createExpensesJob" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+			</list>
+		</property>
 	</bean>
 </beans>	
