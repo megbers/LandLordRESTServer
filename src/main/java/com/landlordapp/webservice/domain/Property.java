@@ -197,7 +197,7 @@ public class Property extends BaseEntity implements java.io.Serializable {
 		this.leaseEnd = leaseEnd;
 	}
 
-	@Column(name = "email", length = 200)
+	@Column(name = "image_location", length = 200)
 	public String getImageLocation() {
 		return imageLocation;
 	}
