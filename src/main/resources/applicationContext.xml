@@ -42,6 +42,7 @@
 				<value>com.landlordapp.webservice.domain.Expense</value>
 				<value>com.landlordapp.webservice.domain.Miles</value>
 				<value>com.landlordapp.webservice.domain.Note</value>
+				<value>com.landlordapp.webservice.domain.Settings</value>
 			</list>
 		</property>
 	</bean>
